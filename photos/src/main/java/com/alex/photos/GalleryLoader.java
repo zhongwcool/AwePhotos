@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.utils.DateUtils;
 import com.alex.photos.utils.FileUtils;
 
 import java.util.ArrayList;
@@ -77,6 +78,12 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             //获取所在的文件夹
             String dirName = FileUtils.getParentFolderName(path);
             PhotoBean albumInfoBean = new PhotoBean(path, name, dateTime, mediaType, size, id, dirName, 1);
+
+            if (mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+                //处理视频的时长信息
+                long duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION));
+                albumInfoBean.setDuration(DateUtils.stringForTime(duration));
+            }
 
             albumInfoList.add(albumInfoBean);
         }

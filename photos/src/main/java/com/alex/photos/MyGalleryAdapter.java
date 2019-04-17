@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alex.photos.bean.PhotoBean;
@@ -43,7 +44,14 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mInfoView.setText(mValues.get(position).getName());
+        if (holder.mItem.getMediaType() == 3) {
+            holder.mRlGifInfo.setVisibility(View.INVISIBLE);
+            holder.mRlVideoInfo.setVisibility(View.VISIBLE);
+            holder.mTvVideoTime.setText(holder.mItem.getDuration());
+        } else {
+            holder.mRlVideoInfo.setVisibility(View.INVISIBLE);
+            holder.mRlGifInfo.setVisibility(".gif".equalsIgnoreCase(holder.mItem.getExtension()) ? View.VISIBLE : View.INVISIBLE);
+        }
 
         Uri mediaUri = Uri.parse("file://" + holder.mItem.getPath());
         Glide.with(mContext)
@@ -64,21 +72,25 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final ImageView mContentView;
-        public final TextView mInfoView;
-        public PhotoBean mItem;
+        private final View mView;
+        private final ImageView mContentView;
+        private TextView mTvVideoTime;
+        private RelativeLayout mRlGifInfo;
+        private RelativeLayout mRlVideoInfo;
+        private PhotoBean mItem;
 
-        public ViewHolder(View view) {
+        private ViewHolder(View view) {
             super(view);
             mView = view;
             mContentView = view.findViewById(R.id.content);
-            mInfoView = view.findViewById(R.id.info);
+            mRlVideoInfo = view.findViewById(R.id.rl_video_info);
+            mRlGifInfo = view.findViewById(R.id.rl_gif_info);
+            mTvVideoTime = view.findViewById(R.id.tv_video_time);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mInfoView.getText() + "'";
+            return super.toString() + " '" + mTvVideoTime.getText() + "'";
         }
     }
 }
