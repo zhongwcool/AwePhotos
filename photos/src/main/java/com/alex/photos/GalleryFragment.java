@@ -6,15 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alex.photos.bean.PhotoBean;
-
-import java.util.ArrayList;
-
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alex.photos.bean.PhotoBean;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Activities containing this fragment MUST implement the {@link GalleryLoader.LoadCallback}
  * interface.
  */
-public class GalleryFragment extends DialogFragment implements GalleryLoader.LoadCallback {
+public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallback {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;

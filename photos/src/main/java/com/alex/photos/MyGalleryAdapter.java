@@ -9,13 +9,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alex.photos.bean.PhotoBean;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PhotoBean}
@@ -62,7 +62,11 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BrowseFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "test");
+                ((AppCompatActivity) mContext).getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(android.R.id.content, BrowseFragment.newInstance(mValues, position), "pager")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

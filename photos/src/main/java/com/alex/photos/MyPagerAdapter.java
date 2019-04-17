@@ -6,21 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.viewpager.widget.PagerAdapter;
+
 import com.alex.photos.bean.PhotoBean;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.viewpager.widget.PagerAdapter;
-
-public class BrowseAdapter extends PagerAdapter {
+public class MyPagerAdapter extends PagerAdapter {
 
     private Context context;
     private List<PhotoBean> list;
     private ImageView imageView;
 
-    public BrowseAdapter(Context context, ArrayList<PhotoBean> photosList) {
+    public MyPagerAdapter(Context context, ArrayList<PhotoBean> photosList) {
         this.context = context;
         this.list = photosList;
     }

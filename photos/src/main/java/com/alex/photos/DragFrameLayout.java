@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.customview.widget.ViewDragHelper;
 
 public class DragFrameLayout extends FrameLayout {
@@ -37,8 +38,8 @@ public class DragFrameLayout extends FrameLayout {
                 super.onViewReleased(releasedChild, xvel, yvel);
 
                 if (mNeedRelease) {
-                    if (getContext() instanceof Activity) {
-                        ((Activity) getContext()).onBackPressed();
+                    if (getContext() instanceof AppCompatActivity) {
+                        ((AppCompatActivity) getContext()).onBackPressed();
                     }
                 } else {
                     needDrag = false;
