@@ -1,10 +1,10 @@
 package com.alex.photos.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
-import java.io.Serializable;
-
-public class PhotoBean implements Serializable {
+public class PhotoBean implements Parcelable {
     private String path;
     private String name;
     private String extension;
@@ -36,6 +36,31 @@ public class PhotoBean implements Serializable {
         this.parentDir = parentDir;
         this.dataType = dataType;
     }
+
+    protected PhotoBean(Parcel in) {
+        path = in.readString();
+        name = in.readString();
+        extension = in.readString();
+        time = in.readLong();
+        mediaType = in.readInt();
+        size = in.readLong();
+        id = in.readInt();
+        parentDir = in.readString();
+        duration = in.readString();
+        dataType = in.readInt();
+    }
+
+    public static final Creator<PhotoBean> CREATOR = new Creator<PhotoBean>() {
+        @Override
+        public PhotoBean createFromParcel(Parcel in) {
+            return new PhotoBean(in);
+        }
+
+        @Override
+        public PhotoBean[] newArray(int size) {
+            return new PhotoBean[size];
+        }
+    };
 
     public int getDataType() {
         return dataType;
@@ -121,5 +146,24 @@ public class PhotoBean implements Serializable {
 
     public void setParentDir(String parentDir) {
         this.parentDir = parentDir;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(path);
+        dest.writeString(name);
+        dest.writeString(extension);
+        dest.writeLong(time);
+        dest.writeInt(mediaType);
+        dest.writeLong(size);
+        dest.writeInt(id);
+        dest.writeString(parentDir);
+        dest.writeString(duration);
+        dest.writeInt(dataType);
     }
 }

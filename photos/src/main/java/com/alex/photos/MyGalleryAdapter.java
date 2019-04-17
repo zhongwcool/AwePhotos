@@ -13,8 +13,8 @@ import com.alex.photos.bean.PhotoBean;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -22,14 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.ViewHolder> {
 
-    private List<PhotoBean> mValues = new ArrayList<>();
+    private ArrayList<PhotoBean> mValues = new ArrayList<>();
     private Context mContext;
 
     public MyGalleryAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void setAdapterList(List<PhotoBean> list) {
+    public void setAdapterList(ArrayList<PhotoBean> list) {
         mValues = list;
         notifyDataSetChanged();
     }
@@ -62,6 +62,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BrowseFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "test");
             }
         });
     }
