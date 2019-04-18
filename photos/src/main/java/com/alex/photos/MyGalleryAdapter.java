@@ -64,7 +64,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
             public void onClick(View v) {
                 ((AppCompatActivity) mContext).getSupportFragmentManager()
                         .beginTransaction()
-                        .add(android.R.id.content, BrowseFragment.newInstance(mValues, position), "pager")
+                        .add(android.R.id.content, PagerFragment.newInstance(mValues, position), "pager")
                         .addToBackStack(null)
                         .commit();
             }

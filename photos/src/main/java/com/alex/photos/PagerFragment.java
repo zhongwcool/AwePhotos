@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BrowseFragment#newInstance} factory method to
+ * Use the {@link PagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BrowseFragment extends Fragment {
+public class PagerFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -29,7 +29,7 @@ public class BrowseFragment extends Fragment {
     private ViewPager viewPager;
 
 
-    public BrowseFragment() {
+    public PagerFragment() {
         // Required empty public constructor
     }
 
@@ -39,10 +39,10 @@ public class BrowseFragment extends Fragment {
      *
      * @param photosList Parameter 1.
      * @param index      Parameter 2.
-     * @return A new instance of fragment BrowseFragment.
+     * @return A new instance of fragment PagerFragment.
      */
-    public static BrowseFragment newInstance(ArrayList<PhotoBean> photosList, int index) {
-        BrowseFragment fragment = new BrowseFragment();
+    public static PagerFragment newInstance(ArrayList<PhotoBean> photosList, int index) {
+        PagerFragment fragment = new PagerFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM1, photosList);
         args.putInt(ARG_PARAM2, index);
@@ -63,14 +63,11 @@ public class BrowseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_browse, container, false);
+        View view = inflater.inflate(R.layout.fragment_view, container, false);
 
-        view.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getContext() instanceof AppCompatActivity) {
-                    ((AppCompatActivity) getContext()).onBackPressed();
-                }
+        view.findViewById(R.id.action_close).setOnClickListener(v -> {
+            if (getContext() instanceof AppCompatActivity) {
+                ((AppCompatActivity) getContext()).onBackPressed();
             }
         });
         // Inflate the layout for this fragment

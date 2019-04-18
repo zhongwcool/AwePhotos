@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">photos</string>
+    <string name="app_authority_suffix" translatable="false">.provider</string>
 </resources>

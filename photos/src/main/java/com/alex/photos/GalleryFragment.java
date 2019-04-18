@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -51,6 +52,9 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        adapter = new MyGalleryAdapter(getActivity());
+        LoaderManager.getInstance(this).initLoader(1, null, new GalleryLoader(getContext(), this));
     }
 
     @Override
@@ -58,27 +62,27 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        view.findViewById(R.id.action_close).setOnClickListener(v -> {
+            if (getContext() instanceof AppCompatActivity) {
+                ((AppCompatActivity) getContext()).onBackPressed();
             }
-            recyclerView.setAdapter(adapter);
+        });
+
+        RecyclerView list = view.findViewById(R.id.list);
+        // Set the adapter
+        Context context = view.getContext();
+        if (mColumnCount <= 1) {
+            list.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            list.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        list.setAdapter(adapter);
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        adapter = new MyGalleryAdapter(context);
-        LoaderManager.getInstance(this).initLoader(1, null, new GalleryLoader(context, this));
     }
 
     @Override

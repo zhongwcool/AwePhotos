@@ -6,16 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
 import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.utils.DateUtils;
 import com.alex.photos.utils.FileUtils;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 
 public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -88,7 +88,7 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             albumInfoList.add(albumInfoBean);
         }
         mLoader.onData(albumInfoList);
-        cursor.close();
+        //cursor.close();
     }
 
     @Override

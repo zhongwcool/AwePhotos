@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, GalleryFragment.newInstance(4))
+                    .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
+                    .addToBackStack(null)
                     .commit();
         });
 
