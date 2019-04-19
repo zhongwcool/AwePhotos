@@ -27,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
+            /*
             getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
                     .addToBackStack(null)
                     .commit();
+                    */
+            GalleryFragment.newInstance(4).show(getSupportFragmentManager(), "gallery");
         });
 
         if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

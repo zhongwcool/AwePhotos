@@ -59,15 +59,15 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
                 .centerCrop()
                 .into(holder.mContentView);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AppCompatActivity) mContext).getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(android.R.id.content, PagerFragment.newInstance(mValues, position), "pager")
-                        .addToBackStack(null)
-                        .commit();
-            }
+        holder.mView.setOnClickListener(v -> {
+            /*
+            ((AppCompatActivity) mContext).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, PagerFragment.newInstance(mValues, position), "pager")
+                    .addToBackStack(null)
+                    .commit();
+                    */
+            PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
         });
     }
 

@@ -5,7 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * Use the {@link PagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PagerFragment extends Fragment {
+public class PagerFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -61,15 +62,10 @@ public class PagerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
 
-        view.findViewById(R.id.action_close).setOnClickListener(v -> {
-            if (getContext() instanceof AppCompatActivity) {
-                ((AppCompatActivity) getContext()).onBackPressed();
-            }
-        });
         // Inflate the layout for this fragment
         viewPager = view.findViewById(R.id.browseViewPager);
 

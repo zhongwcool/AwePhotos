@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,11 +23,13 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link GalleryLoader.LoadCallback}
  * interface.
  */
-public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallback {
+public class GalleryFragment extends DialogFragment implements GalleryLoader.LoadCallback {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
+    private View loading;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,8 +55,9 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        adapter = new MyGalleryAdapter(getActivity());
-        LoaderManager.getInstance(this).initLoader(1, null, new GalleryLoader(getContext(), this));
+        if (null == adapter) {
+            adapter = new MyGalleryAdapter(getActivity());
+        }
     }
 
     @Override
@@ -63,22 +65,27 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        view.findViewById(R.id.action_close).setOnClickListener(v -> {
-            if (getContext() instanceof AppCompatActivity) {
-                ((AppCompatActivity) getContext()).onBackPressed();
-            }
-        });
+        loading = view.findViewById(R.id.progress);
 
-        RecyclerView list = view.findViewById(R.id.list);
+        recyclerView = view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         if (mColumnCount <= 1) {
-            list.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
-            list.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        list.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        recyclerView.setVisibility(View.INVISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        LoaderManager.getInstance(this).restartLoader(1, null, new GalleryLoader(getContext(), this));
     }
 
     @Override
@@ -93,6 +100,8 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
 
     @Override
     public void onData(ArrayList<PhotoBean> list) {
+        loading.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         adapter.setAdapterList(list);
     }
 }
