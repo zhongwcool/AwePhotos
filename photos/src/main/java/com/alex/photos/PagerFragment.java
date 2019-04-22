@@ -24,10 +24,8 @@ public class PagerFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private ArrayList<PhotoBean> list;
     private int index;
     private MyPagerAdapter mPagerAdapter;
-    private ViewPager viewPager;
 
 
     public PagerFragment() {
@@ -55,7 +53,7 @@ public class PagerFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            list = getArguments().getParcelableArrayList(ARG_PARAM1);
+            ArrayList<PhotoBean> list = getArguments().getParcelableArrayList(ARG_PARAM1);
             index = getArguments().getInt(ARG_PARAM2);
             mPagerAdapter = new MyPagerAdapter(this.getActivity(), list);
         }
@@ -67,7 +65,7 @@ public class PagerFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
 
         // Inflate the layout for this fragment
-        viewPager = view.findViewById(R.id.browseViewPager);
+        ViewPager viewPager = view.findViewById(R.id.browseViewPager);
 
         viewPager.setAdapter(mPagerAdapter);
         viewPager.setCurrentItem(index);

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import com.alex.photos.GalleryFragment;
+import com.alex.photos.full.GalleryActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
                     .addToBackStack(null)
                     .commit();
                     */
-            GalleryFragment.newInstance(4).show(getSupportFragmentManager(), "gallery");
+            //GalleryFragment.newInstance(4).show(getSupportFragmentManager(), "gallery");
+            GalleryActivity.startActivity(this);
         });
 
         if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

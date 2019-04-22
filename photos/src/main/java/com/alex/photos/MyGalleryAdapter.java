@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.full.PreviewActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -67,7 +67,8 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
                     .addToBackStack(null)
                     .commit();
                     */
-            PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
+            //PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
+            PreviewActivity.startActivity(mContext, position, mValues);
         });
     }
 

@@ -50,13 +50,14 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 + " OR "
                 + MediaStore.Files.FileColumns.MEDIA_TYPE + "="
                 + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+        String selection1 = MediaStore.Files.FileColumns.DISPLAY_NAME + " like '%JSV%'";
 
         Uri queryUri = MediaStore.Files.getContentUri("external");
         CursorLoader cursorLoader = new CursorLoader(
                 mContext,
                 queryUri,
                 MEDIA_PROJECTION,
-                selection,
+                selection1,
                 null, // Selection args (none).
                 MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
         );
