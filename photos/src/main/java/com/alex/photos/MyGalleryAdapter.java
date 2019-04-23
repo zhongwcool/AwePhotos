@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.full.PreviewActivity;
+import com.alex.photos.full.PagerActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
                     .commit();
                     */
             //PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
-            PreviewActivity.startActivity(mContext, position, mValues);
+            PagerActivity.startActivity(mContext, position, mValues);
         });
     }
 

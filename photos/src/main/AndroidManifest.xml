@@ -8,12 +8,13 @@
     <application>
         <activity
             android:name=".full.GalleryActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".full.PreviewActivity"
+            android:name=".full.PagerActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/FullscreenTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

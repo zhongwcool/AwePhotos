@@ -32,7 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreviewActivity extends AppCompatActivity implements OnPhotoTapListener {
+public class PagerActivity extends AppCompatActivity implements OnPhotoTapListener {
     /**
      * UI交互组件
      */
@@ -63,8 +63,9 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                    //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    //| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            );
         }
     };
 
@@ -102,7 +103,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
     private void show() {
         // Show the system bar
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         );
         mViewPager.setBackgroundColor(getResources().getColor(android.R.color.white));
 
@@ -114,7 +115,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
     }
 
     public static void startActivity(Context context, int position, ArrayList<PhotoBean> list) {
-        Intent intent = new Intent(context, PreviewActivity.class);
+        Intent intent = new Intent(context, PagerActivity.class);
         intent.putParcelableArrayListExtra(photoListExtra, list);
         intent.putExtra(positionExtra, position);
         //intent.putExtra(maxSelectExtra, maxSelect);
@@ -130,13 +131,13 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         } else {
             window.getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -148,7 +149,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
             window.setStatusBarColor(getResources().getColor(R.color.white));
             //window.setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_preview);
+        setContentView(R.layout.activity_pager);
         //Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -225,8 +226,8 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
             fragmentList.add(PreviewFragment.newInstance(mAllPhotoList.get(i)));
         }
 
-        final PreviewViewPagerAdapter viewPagerAdapter = new PreviewViewPagerAdapter(getSupportFragmentManager(), fragmentList);
-        mViewPager.setAdapter(viewPagerAdapter);
+        final MyPager2Adapter pagerAdapter = new MyPager2Adapter(getSupportFragmentManager(), fragmentList);
+        mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(position);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -241,7 +242,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPhotoTapList
                 if (dataType == 0) {
                     if (position > lastViewPageItemPosition || position == 0) {
                         mViewPager.setCurrentItem(position + 1);
-                    } else if (position < lastViewPageItemPosition || position == viewPagerAdapter.getCount() - 1) {
+                    } else if (position < lastViewPageItemPosition || position == pagerAdapter.getCount() - 1) {
                         mViewPager.setCurrentItem(position - 1);
                     }
                     //mRbSelect.setChecked(false);

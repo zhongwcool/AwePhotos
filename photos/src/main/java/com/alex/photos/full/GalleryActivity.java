@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.GalleryLoader;
@@ -41,7 +40,7 @@ public class GalleryActivity extends AppCompatActivity implements GalleryLoader.
         Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
         if (mConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             //竖屏
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         } else {
             //横屏
             recyclerView.setLayoutManager(new GridLayoutManager(this, 8));
