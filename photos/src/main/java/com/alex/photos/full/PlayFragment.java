@@ -1,6 +1,7 @@
 package com.alex.photos.full;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.alex.photos.R;
@@ -22,6 +24,7 @@ import com.alex.photos.bean.PhotoBean;
 public class PlayFragment extends Fragment {
     private static final String KEY_MEDIA = "media";
     private PhotoBean mPhotoInfoBean;
+    private OnToggleListener mListener;
 
     public PlayFragment() {
         // Required empty public constructor
@@ -51,20 +54,29 @@ public class PlayFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_play, container, false);
 
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
+        view.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+
+                }
+                break;
+                case MotionEvent.ACTION_UP: {
+                    v.performClick();
+                    mListener.onToggle();
+                }
+                break;
             }
+            return true;
         });
         VideoView mVideoView = view.findViewById(R.id.video_view);
         mVideoView.requestFocus();
         MediaController media = new MediaController(getContext());
+        media.hide();
         //将VideoView与MediaController进行关联
         mVideoView.setVideoPath(mPhotoInfoBean.getPath());
         mVideoView.setMediaController(media);
@@ -73,5 +85,22 @@ public class PlayFragment extends Fragment {
         mVideoView.requestFocus();
         mVideoView.start();
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnToggleListener) {
+            mListener = (OnToggleListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 }

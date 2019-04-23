@@ -32,7 +32,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagerActivity extends AppCompatActivity implements OnPhotoTapListener {
+public class PagerActivity extends AppCompatActivity implements OnPhotoTapListener,
+        OnToggleListener {
     /**
      * UI交互组件
      */
@@ -223,7 +224,7 @@ public class PagerActivity extends AppCompatActivity implements OnPhotoTapListen
 
         List<BaseFragment> fragmentList = new ArrayList<>();
         for (int i = 0; i < mAllPhotoList.size(); i++) {
-            fragmentList.add(PreviewFragment.newInstance(mAllPhotoList.get(i)));
+            fragmentList.add(Pager2Fragment.newInstance(mAllPhotoList.get(i)));
         }
 
         final MyPager2Adapter pagerAdapter = new MyPager2Adapter(getSupportFragmentManager(), fragmentList);
@@ -285,5 +286,10 @@ public class PagerActivity extends AppCompatActivity implements OnPhotoTapListen
         } catch (PackageManager.NameNotFoundException e) {
             throw new IllegalArgumentException(" get application info error! ", e);
         }
+    }
+
+    @Override
+    public void onToggle() {
+        toggle();
     }
 }

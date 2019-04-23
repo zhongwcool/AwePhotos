@@ -1,5 +1,6 @@
 package com.alex.photos.full;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +15,15 @@ import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
-public class PreviewFragment extends BaseFragment implements View.OnClickListener {
+public class Pager2Fragment extends BaseFragment implements View.OnClickListener {
     private static final String KEY_MEDIA = "media";
     private View mPlayVideo;
     private PhotoView mPhotoView;
     private PhotoBean mPhotoInfoBean;
+    private OnToggleListener mListener;
 
-    public static PreviewFragment newInstance(PhotoBean media) {
-        PreviewFragment f = new PreviewFragment();
+    public static Pager2Fragment newInstance(PhotoBean media) {
+        Pager2Fragment f = new Pager2Fragment();
         Bundle b = new Bundle();
         b.putParcelable(KEY_MEDIA, media);
         f.setArguments(b);
@@ -38,7 +40,8 @@ public class PreviewFragment extends BaseFragment implements View.OnClickListene
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_preview, null);
         mPlayVideo = view.findViewById(R.id.play_control);
         mPhotoView = view.findViewById(R.id.shot_view);
@@ -65,6 +68,23 @@ public class PreviewFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnToggleListener) {
+            mListener = (OnToggleListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
@@ -72,6 +92,8 @@ public class PreviewFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (R.id.play_control == v.getId()) {
+            mListener.onToggle();
+
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(android.R.id.content, PlayFragment.newInstance(mPhotoInfoBean), "play")
