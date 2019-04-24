@@ -25,9 +25,11 @@ public class MyFullGalleryAdapter extends RecyclerView.Adapter<MyFullGalleryAdap
 
     private ArrayList<PhotoBean> mValues = new ArrayList<>();
     private Context mContext;
+    private boolean isLand;
 
-    public MyFullGalleryAdapter(Context context) {
+    public MyFullGalleryAdapter(Context context, boolean land) {
         this.mContext = context;
+        isLand = land;
     }
 
     public void setAdapterList(ArrayList<PhotoBean> list) {
@@ -70,7 +72,7 @@ public class MyFullGalleryAdapter extends RecyclerView.Adapter<MyFullGalleryAdap
                     .commit();
                     */
             //PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
-            FullPagerActivity.startActivity(mContext, position, mValues);
+            FullPagerActivity.startActivity(mContext, position, mValues, isLand);
         });
     }
 

@@ -3,6 +3,7 @@ package com.alex.photos.full;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -34,14 +35,21 @@ import java.util.List;
 
 public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapListener,
         OnToggleListener {
+    private static final String ARG_IS_LANDSCAPE = "is_landscape";
     /**
      * UI交互组件
      */
     private static final int UI_ANIMATION_DELAY = 0;
-
     private static final String photoListExtra = "photoListExtra";
     private static final String positionExtra = "positionExtra";
-    //private static final String maxSelectExtra = "maxSelectExtra";
+
+    public static void startActivity(Context context, int position, ArrayList<PhotoBean> list, boolean isLandscape) {
+        Intent intent = new Intent(context, FullPagerActivity.class);
+        intent.putParcelableArrayListExtra(photoListExtra, list);
+        intent.putExtra(positionExtra, position);
+        intent.putExtra(ARG_IS_LANDSCAPE, isLandscape);
+        context.startActivity(intent);
+    }
 
     private ViewPager mViewPager;
     private ActionBar mActionBar;
@@ -115,14 +123,6 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
     }
 
-    public static void startActivity(Context context, int position, ArrayList<PhotoBean> list) {
-        Intent intent = new Intent(context, FullPagerActivity.class);
-        intent.putParcelableArrayListExtra(photoListExtra, list);
-        intent.putExtra(positionExtra, position);
-        //intent.putExtra(maxSelectExtra, maxSelect);
-        context.startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +151,14 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
             //window.setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_pager);
+
+        boolean isLand = getIntent().getBooleanExtra(ARG_IS_LANDSCAPE, true);
+        if (isLand) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         //Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -2,6 +2,7 @@ package com.alex.photos.full;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -17,11 +18,13 @@ import com.alex.photos.widget.GalleryLoader;
 import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity implements GalleryLoader.LoadCallback {
+    private static final String ARG_IS_LANDSCAPE = "is_landscape";
     private MyFullGalleryAdapter adapter;
     private RecyclerView recyclerView;
 
-    public static void startActivity(Activity activity) {
+    public static void startActivity(Activity activity, boolean isLandscape) {
         Intent intent = new Intent(activity, GalleryActivity.class);
+        intent.putExtra(ARG_IS_LANDSCAPE, isLandscape);
         activity.startActivity(intent);
     }
 
@@ -30,8 +33,15 @@ public class GalleryActivity extends AppCompatActivity implements GalleryLoader.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
+        boolean isLand = getIntent().getBooleanExtra(ARG_IS_LANDSCAPE, true);
+        if (isLand) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         if (null == adapter) {
-            adapter = new MyFullGalleryAdapter(this);
+            adapter = new MyFullGalleryAdapter(this, isLand);
         }
 
         recyclerView = findViewById(R.id.list);
