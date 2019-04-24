@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
                     */
             //GalleryFragment.newInstance(4).show(getSupportFragmentManager(), "gallery");
-            GalleryActivity.startActivity(this, true);
+            GalleryActivity.start(this);
         });
 
         if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

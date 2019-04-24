@@ -3,7 +3,6 @@ package com.alex.photos.full;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -35,7 +34,6 @@ import java.util.List;
 
 public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapListener,
         OnToggleListener {
-    private static final String ARG_IS_LANDSCAPE = "ARG_IS_LANDSCAPE";
     private static final String ARG_PHOTO_LIST = "ARG_PHOTO_LIST";
     private static final String ARG_POSITION = "ARG_POSITION";
     /**
@@ -43,11 +41,10 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
      */
     private static final int UI_ANIMATION_DELAY = 0;
 
-    public static void startActivity(Context context, int position, ArrayList<PhotoBean> list, boolean isLandscape) {
+    public static void start(Context context, int position, ArrayList<PhotoBean> list) {
         Intent intent = new Intent(context, FullPagerActivity.class);
         intent.putParcelableArrayListExtra(ARG_PHOTO_LIST, list);
         intent.putExtra(ARG_POSITION, position);
-        intent.putExtra(ARG_IS_LANDSCAPE, isLandscape);
         context.startActivity(intent);
     }
 
@@ -151,13 +148,6 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
             //window.setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_full_pager);
-
-        boolean isLand = getIntent().getBooleanExtra(ARG_IS_LANDSCAPE, true);
-        if (isLand) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
 
         //Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
