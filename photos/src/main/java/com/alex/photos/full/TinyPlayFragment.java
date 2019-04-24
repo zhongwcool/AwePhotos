@@ -1,6 +1,5 @@
 package com.alex.photos.full;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,10 +18,10 @@ import com.alex.photos.bean.PhotoBean;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PlayFragment#newInstance} factory method to
+ * Use the {@link TinyPlayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlayFragment extends Fragment {
+public class TinyPlayFragment extends Fragment {
     private static final String KEY_MEDIA = "media";
     private PhotoBean mPhotoInfoBean;
     private OnToggleListener mListener;
@@ -30,7 +29,7 @@ public class PlayFragment extends Fragment {
     private VideoView mVideoView;
     private int lastSeek = 0;
 
-    public PlayFragment() {
+    public TinyPlayFragment() {
         // Required empty public constructor
     }
 
@@ -39,10 +38,10 @@ public class PlayFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param media Parameter 1.
-     * @return A new instance of fragment PlayFragment.
+     * @return A new instance of fragment TinyPlayFragment.
      */
-    public static PlayFragment newInstance(PhotoBean media) {
-        PlayFragment f = new PlayFragment();
+    public static TinyPlayFragment newInstance(PhotoBean media) {
+        TinyPlayFragment f = new TinyPlayFragment();
         Bundle b = new Bundle();
         b.putParcelable(KEY_MEDIA, media);
         f.setArguments(b);
@@ -62,7 +61,7 @@ public class PlayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_play, container, false);
+        View view = inflater.inflate(R.layout.fragment_tiny_play, container, false);
 
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {

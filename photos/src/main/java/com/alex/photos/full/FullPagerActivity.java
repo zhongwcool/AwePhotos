@@ -35,18 +35,18 @@ import java.util.List;
 
 public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapListener,
         OnToggleListener {
-    private static final String ARG_IS_LANDSCAPE = "is_landscape";
+    private static final String ARG_IS_LANDSCAPE = "ARG_IS_LANDSCAPE";
+    private static final String ARG_PHOTO_LIST = "ARG_PHOTO_LIST";
+    private static final String ARG_POSITION = "ARG_POSITION";
     /**
      * UI交互组件
      */
     private static final int UI_ANIMATION_DELAY = 0;
-    private static final String photoListExtra = "photoListExtra";
-    private static final String positionExtra = "positionExtra";
 
     public static void startActivity(Context context, int position, ArrayList<PhotoBean> list, boolean isLandscape) {
         Intent intent = new Intent(context, FullPagerActivity.class);
-        intent.putParcelableArrayListExtra(photoListExtra, list);
-        intent.putExtra(positionExtra, position);
+        intent.putParcelableArrayListExtra(ARG_PHOTO_LIST, list);
+        intent.putExtra(ARG_POSITION, position);
         intent.putExtra(ARG_IS_LANDSCAPE, isLandscape);
         context.startActivity(intent);
     }
@@ -150,7 +150,7 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
             window.setStatusBarColor(getResources().getColor(R.color.white));
             //window.setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_pager);
+        setContentView(R.layout.activity_full_pager);
 
         boolean isLand = getIntent().getBooleanExtra(ARG_IS_LANDSCAPE, true);
         if (isLand) {
@@ -221,8 +221,8 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
 
     protected void initData() {
         Intent intent = getIntent();
-        mAllPhotoList = intent.getParcelableArrayListExtra(photoListExtra);
-        int position = intent.getIntExtra(positionExtra, 1);
+        mAllPhotoList = intent.getParcelableArrayListExtra(ARG_PHOTO_LIST);
+        int position = intent.getIntExtra(ARG_POSITION, 1);
         lastViewPageItemPosition = position;
         //mMaxSelectCount = intent.getIntExtra(maxSelectExtra, 1);
 
