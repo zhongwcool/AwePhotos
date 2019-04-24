@@ -10,15 +10,14 @@ import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alex.photos.GalleryLoader;
-import com.alex.photos.MyGalleryAdapter;
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.widget.GalleryLoader;
 
 import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity implements GalleryLoader.LoadCallback {
-    private MyGalleryAdapter adapter;
+    private MyFullGalleryAdapter adapter;
     private RecyclerView recyclerView;
 
     public static void startActivity(Activity activity) {
@@ -32,7 +31,7 @@ public class GalleryActivity extends AppCompatActivity implements GalleryLoader.
         setContentView(R.layout.activity_gallery);
 
         if (null == adapter) {
-            adapter = new MyGalleryAdapter(this);
+            adapter = new MyFullGalleryAdapter(this);
         }
 
         recyclerView = findViewById(R.id.list);

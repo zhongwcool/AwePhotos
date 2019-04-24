@@ -8,11 +8,12 @@
     <application>
         <activity
             android:name=".full.GalleryActivity"
+            android:label="@string/label_activity_gallery"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".full.PagerActivity"
+            android:name=".full.FullPagerActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
 

@@ -1,4 +1,4 @@
-package com.alex.photos;
+package com.alex.photos.piece;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
 
 import java.util.ArrayList;

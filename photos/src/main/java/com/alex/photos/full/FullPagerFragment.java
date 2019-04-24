@@ -15,15 +15,15 @@ import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
-public class Pager2Fragment extends BaseFragment implements View.OnClickListener {
+public class FullPagerFragment extends BaseFragment implements View.OnClickListener {
     private static final String KEY_MEDIA = "media";
     private View mPlayVideo;
     private PhotoView mPhotoView;
     private PhotoBean mPhotoInfoBean;
     private OnToggleListener mListener;
 
-    public static Pager2Fragment newInstance(PhotoBean media) {
-        Pager2Fragment f = new Pager2Fragment();
+    public static FullPagerFragment newInstance(PhotoBean media) {
+        FullPagerFragment f = new FullPagerFragment();
         Bundle b = new Bundle();
         b.putParcelable(KEY_MEDIA, media);
         f.setArguments(b);
@@ -68,7 +68,7 @@ public class Pager2Fragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof OnToggleListener) {
             mListener = (OnToggleListener) context;

@@ -1,4 +1,4 @@
-package com.alex.photos;
+package com.alex.photos.piece;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.widget.GalleryLoader;
 
 import java.util.ArrayList;
 

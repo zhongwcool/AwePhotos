@@ -5,10 +5,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-public class MyPager2Adapter extends FragmentStatePagerAdapter {
+public class MyFullPagerAdapter extends FragmentStatePagerAdapter {
     private List<BaseFragment> mFragments;
 
-    public MyPager2Adapter(FragmentManager fm, List<BaseFragment> mFragments) {
+    public MyFullPagerAdapter(FragmentManager fm, List<BaseFragment> mFragments) {
         super(fm);
         this.mFragments = mFragments;
     }

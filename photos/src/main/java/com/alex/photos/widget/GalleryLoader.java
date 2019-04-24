@@ -1,4 +1,4 @@
-package com.alex.photos;
+package com.alex.photos.widget;
 
 import android.content.Context;
 import android.database.Cursor;

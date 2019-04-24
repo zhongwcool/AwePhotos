@@ -1,4 +1,4 @@
-package com.alex.photos;
+package com.alex.photos.widget;
 
 import android.app.Activity;
 import android.content.Context;

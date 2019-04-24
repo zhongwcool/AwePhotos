@@ -25,6 +25,9 @@ public class PlayFragment extends Fragment {
     private static final String KEY_MEDIA = "media";
     private PhotoBean mPhotoInfoBean;
     private OnToggleListener mListener;
+    private MediaController mediaController;
+    private VideoView mVideoView;
+    private int lastSeek = 0;
 
     public PlayFragment() {
         // Required empty public constructor
@@ -51,6 +54,7 @@ public class PlayFragment extends Fragment {
         if (getArguments() != null) {
             mPhotoInfoBean = getArguments().getParcelable(KEY_MEDIA);
         }
+        mediaController = new MediaController(getContext());
     }
 
     @Override
@@ -73,17 +77,11 @@ public class PlayFragment extends Fragment {
             }
             return true;
         });
-        VideoView mVideoView = view.findViewById(R.id.video_view);
-        mVideoView.requestFocus();
-        MediaController media = new MediaController(getContext());
-        media.hide();
+        mVideoView = view.findViewById(R.id.video_view);
         //将VideoView与MediaController进行关联
         mVideoView.setVideoPath(mPhotoInfoBean.getPath());
-        mVideoView.setMediaController(media);
-        media.setMediaPlayer(mVideoView);
-        //让VideoView获取焦点
-        mVideoView.requestFocus();
-        mVideoView.start();
+        mVideoView.setMediaController(mediaController);
+        mediaController.setMediaPlayer(mVideoView);
         return view;
     }
 
@@ -99,8 +97,36 @@ public class PlayFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //让VideoView获取焦点
+        mVideoView.requestFocus();
+        mVideoView.start();
+        mVideoView.seekTo(lastSeek);
+        //mediaController.setVisibility(View.GONE);//隐藏进度条
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mVideoView.pause();
+        lastSeek = mVideoView.getCurrentPosition();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mediaController = null;
     }
 }

@@ -1,4 +1,4 @@
-package com.alex.photos;
+package com.alex.photos.piece;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,10 +9,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.full.PagerActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -34,15 +36,16 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_gallery, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         if (holder.mItem.getMediaType() == 3) {
             holder.mRlGifInfo.setVisibility(View.INVISIBLE);
@@ -60,15 +63,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
                 .into(holder.mContentView);
 
         holder.mView.setOnClickListener(v -> {
-            /*
-            ((AppCompatActivity) mContext).getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(android.R.id.content, PagerFragment.newInstance(mValues, position), "pager")
-                    .addToBackStack(null)
-                    .commit();
-                    */
-            //PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
-            PagerActivity.startActivity(mContext, position, mValues);
+            PagerFragment.newInstance(mValues, position).show(((AppCompatActivity) mContext).getSupportFragmentManager(), "pager");
         });
     }
 
@@ -94,6 +89,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<MyGalleryAdapter.View
             mTvVideoTime = view.findViewById(R.id.tv_video_time);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + mTvVideoTime.getText() + "'";
