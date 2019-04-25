@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.widget.OnToggleListener;
+import com.alex.photos.widget.TinyPlayFragment;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -19,7 +21,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
     private static final String KEY_MEDIA = "media";
     private View mPlayVideo;
     private PhotoView mPhotoView;
-    private PhotoBean mPhotoInfoBean;
+    private PhotoBean bean;
     private OnToggleListener mListener;
 
     public static FullPagerFragment newInstance(PhotoBean media) {
@@ -34,7 +36,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPhotoInfoBean = getArguments().getParcelable(KEY_MEDIA);
+            bean = getArguments().getParcelable(KEY_MEDIA);
         }
     }
 
@@ -53,14 +55,14 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mPhotoInfoBean.getMediaType() == 3) {
+        if (bean.getMediaType() == 3) {
             mPlayVideo.setVisibility(View.VISIBLE);
         } else {
             mPlayVideo.setVisibility(View.GONE);
         }
 
         Glide.with(this)
-                .load(mPhotoInfoBean.getPath())
+                .load(bean.getPath())
                 .into(mPhotoView);
 
         mPhotoView.setMaximumScale(5);
@@ -96,7 +98,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
 
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, TinyPlayFragment.newInstance(mPhotoInfoBean), "play")
+                    .replace(android.R.id.content, TinyPlayFragment.newInstance(bean), "play")
                     .addToBackStack(null)
                     .commit();
         }

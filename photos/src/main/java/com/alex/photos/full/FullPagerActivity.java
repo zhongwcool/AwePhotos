@@ -26,6 +26,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.alex.photos.BuildConfig;
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.widget.OnToggleListener;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 
 import java.io.File;

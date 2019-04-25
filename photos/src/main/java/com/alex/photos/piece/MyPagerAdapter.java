@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.widget.TinyPlayFragment;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -39,7 +41,11 @@ public class MyPagerAdapter extends PagerAdapter {
         if (list.get(position).getMediaType() == 3) {
             view.findViewById(R.id.control).setVisibility(View.VISIBLE);
             view.findViewById(R.id.action_play).setOnClickListener(v -> {
-                //TODO 播放视频
+                ((AppCompatActivity) mContext).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(android.R.id.content, TinyPlayFragment.newInstance(list.get(position)), "play")
+                        .addToBackStack(null)
+                        .commit();
             });
         } else {
             view.findViewById(R.id.control).setVisibility(View.INVISIBLE);

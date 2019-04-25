@@ -1,16 +1,16 @@
 package com.alex.photos.piece;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.R;
@@ -25,8 +25,7 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link GalleryLoader.LoadCallback}
  * interface.
  */
-public class GalleryFragment extends DialogFragment implements GalleryLoader.LoadCallback {
-
+public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallback {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
@@ -55,6 +54,9 @@ public class GalleryFragment extends DialogFragment implements GalleryLoader.Loa
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            if (mColumnCount < 1 | mColumnCount > 5) {
+                mColumnCount = 4;
+            }
         }
 
         if (null == adapter) {
@@ -71,11 +73,14 @@ public class GalleryFragment extends DialogFragment implements GalleryLoader.Loa
 
         recyclerView = view.findViewById(R.id.list);
         // Set the adapter
-        Context context = view.getContext();
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        //获取屏幕方向
+        Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+        if (mConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            //竖屏
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
         } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            //横屏
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount * 2));
         }
         recyclerView.setAdapter(adapter);
 

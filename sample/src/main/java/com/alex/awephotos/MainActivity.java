@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import com.alex.photos.full.GalleryActivity;
+import com.alex.photos.piece.GalleryFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,14 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            /*
             getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
                     .addToBackStack(null)
                     .commit();
-                    */
             //GalleryFragment.newInstance(4).show(getSupportFragmentManager(), "gallery");
-            GalleryActivity.start(this);
+            //GalleryActivity.start(this);
         });
 
         if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

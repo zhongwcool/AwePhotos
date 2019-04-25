@@ -1,5 +1,6 @@
-package com.alex.photos.full;
+package com.alex.photos.widget;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +24,7 @@ import com.alex.photos.bean.PhotoBean;
  */
 public class TinyPlayFragment extends Fragment {
     private static final String KEY_MEDIA = "media";
-    private PhotoBean mPhotoInfoBean;
+    private PhotoBean bean;
     private OnToggleListener mListener;
     private MediaController mediaController;
     private VideoView mVideoView;
@@ -52,7 +53,15 @@ public class TinyPlayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPhotoInfoBean = getArguments().getParcelable(KEY_MEDIA);
+            bean = getArguments().getParcelable(KEY_MEDIA);
+            if (null == bean || null == bean.getPath()) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage("播放地址为空")
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            getActivity().onBackPressed();//销毁自己
+                        }).create()
+                        .show();
+            }
         }
         mediaController = new MediaController(getContext());
     }
@@ -71,7 +80,7 @@ public class TinyPlayFragment extends Fragment {
                 break;
                 case MotionEvent.ACTION_UP: {
                     v.performClick();
-                    mListener.onToggle();
+                    if (null != mListener) mListener.onToggle();
                 }
                 break;
             }
@@ -79,7 +88,7 @@ public class TinyPlayFragment extends Fragment {
         });
         mVideoView = view.findViewById(R.id.video_view);
         //将VideoView与MediaController进行关联
-        mVideoView.setVideoPath(mPhotoInfoBean.getPath());
+        mVideoView.setVideoPath(bean.getPath());
         mVideoView.setMediaController(mediaController);
         mediaController.setMediaPlayer(mVideoView);
         return view;
@@ -90,9 +99,6 @@ public class TinyPlayFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnToggleListener) {
             mListener = (OnToggleListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
