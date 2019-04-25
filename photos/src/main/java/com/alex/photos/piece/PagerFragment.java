@@ -55,7 +55,10 @@ public class PagerFragment extends Fragment {
         if (getArguments() != null) {
             ArrayList<PhotoBean> list = getArguments().getParcelableArrayList(ARG_PARAM1);
             index = getArguments().getInt(ARG_PARAM2);
-            mPagerAdapter = new MyPagerAdapter(this.getActivity(), list);
+            mPagerAdapter = new MyPagerAdapter(this.getActivity());
+            mPagerAdapter.setAdapterList(list);
+        } else {
+            getActivity().onBackPressed();
         }
     }
 

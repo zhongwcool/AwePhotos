@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -18,14 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
-
     private Context mContext;
-    private List<PhotoBean> list;
+    private List<PhotoBean> list = new ArrayList<>();
     private View view;
 
-    public MyPagerAdapter(Context context, ArrayList<PhotoBean> photosList) {
+    public MyPagerAdapter(Context context) {
         this.mContext = context;
-        this.list = photosList;
+    }
+
+    public void setAdapterList(ArrayList<PhotoBean> photosList) {
+        list = photosList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -33,8 +37,9 @@ public class MyPagerAdapter extends PagerAdapter {
         return list.size();
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = View.inflate(mContext, R.layout.item_view, null);
         PhotoView imageView = view.findViewById(R.id.content);
 
@@ -63,17 +68,17 @@ public class MyPagerAdapter extends PagerAdapter {
 
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
     }
 
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         view = (View) object;
     }
 
