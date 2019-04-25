@@ -90,6 +90,7 @@ public class TinyPlayFragment extends Fragment {
         //将VideoView与MediaController进行关联
         mVideoView.setVideoPath(bean.getPath());
         mVideoView.setMediaController(mediaController);
+        mVideoView.setOnCompletionListener(mp -> getActivity().onBackPressed());
         mediaController.setMediaPlayer(mVideoView);
         return view;
     }
