@@ -22,7 +22,11 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCallback {
+    private static final String SAVED_INDEX = "android:index";
+
     private MyPagerAdapter mPagerAdapter;
+    private int currentIndex = 0;
+    private ViewPager viewPager;
 
     public SoloPagerFragment() {
         // Required empty public constructor
@@ -45,6 +49,10 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            currentIndex = savedInstanceState.getInt(SAVED_INDEX, 0);
+        }
+
         mPagerAdapter = new MyPagerAdapter(this.getActivity());
     }
 
@@ -55,9 +63,8 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
         View view = inflater.inflate(R.layout.fragment_solo_pager, container, false);
 
         // Inflate the layout for this fragment
-        ViewPager viewPager = view.findViewById(R.id.viewPager);
+        viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(mPagerAdapter);
-        viewPager.setCurrentItem(0);
 
         return view;
     }
@@ -69,7 +76,15 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        currentIndex = viewPager.getCurrentItem();
+        outState.putInt(SAVED_INDEX, currentIndex);
+    }
+
+    @Override
     public void onData(ArrayList<PhotoBean> photos) {
         mPagerAdapter.setAdapterList(photos);
+        if (currentIndex < photos.size()) viewPager.setCurrentItem(currentIndex);
     }
 }

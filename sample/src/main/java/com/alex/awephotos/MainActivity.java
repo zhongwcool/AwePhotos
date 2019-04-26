@@ -12,13 +12,14 @@ import androidx.core.app.ActivityCompat;
 
 import com.alex.photos.full.GalleryActivity;
 import com.alex.photos.piece.GalleryFragment;
+import com.alex.photos.piece.SoloPagerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
     private String[] mPerms = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-    private boolean isPiece = true;
+    private int displayMode = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +30,25 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            if (isPiece) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
-                        .addToBackStack(null)
-                        .commit();
-            } else {
-                GalleryActivity.start(this);
+            switch (displayMode) {
+                case 0: {
+                    GalleryActivity.start(this);
+                }
+                break;
+                case 1: {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
+                            .addToBackStack(null)
+                            .commit();
+                }
+                break;
+                case 2: {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(android.R.id.content, SoloPagerFragment.newInstance(), "solopager")
+                            .addToBackStack(null)
+                            .commit();
+                }
+                break;
             }
         });
 
