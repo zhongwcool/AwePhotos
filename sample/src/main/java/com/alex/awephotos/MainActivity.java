@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,13 +14,11 @@ import androidx.core.app.ActivityCompat;
 import com.alex.photos.full.GalleryActivity;
 import com.alex.photos.piece.GalleryFragment;
 import com.alex.photos.piece.SoloPagerFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String[] mPerms = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-    private int displayMode = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,30 +26,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            switch (displayMode) {
-                case 0: {
-                    GalleryActivity.start(this);
-                }
-                break;
-                case 1: {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
-                            .addToBackStack(null)
-                            .commit();
-                }
-                break;
-                case 2: {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, SoloPagerFragment.newInstance(), "solopager")
-                            .addToBackStack(null)
-                            .commit();
-                }
-                break;
-            }
-        });
+        findViewById(R.id.tv_model_1).setOnClickListener(this);
+        findViewById(R.id.tv_model_2).setOnClickListener(this);
+        findViewById(R.id.tv_model_3).setOnClickListener(this);
 
         if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             ActivityCompat.requestPermissions(this, mPerms, 0x001);
@@ -77,5 +55,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_model_1: {
+                GalleryActivity.start(this);
+            }
+            break;
+            case R.id.tv_model_2: {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
+                        .addToBackStack(null)
+                        .commit();
+            }
+            break;
+            case R.id.tv_model_3: {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, SoloPagerFragment.newInstance(), "solo-pager")
+                        .addToBackStack(null)
+                        .commit();
+            }
+            break;
+        }
     }
 }

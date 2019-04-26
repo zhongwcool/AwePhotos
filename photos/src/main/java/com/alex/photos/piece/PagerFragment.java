@@ -1,10 +1,10 @@
 package com.alex.photos.piece;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,12 +21,16 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class PagerFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String SAVED_INDEX = "android:index";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private int index;
+    private int currentIndex = 0;
+    private int mSize = 1;
     private MyPagerAdapter mPagerAdapter;
+    private TextView tvPagerIndex;
+    private ViewPager mViewPager;
+    private ArrayList<PhotoBean> photos;
 
     public PagerFragment() {
         // Required empty public constructor
@@ -53,12 +57,22 @@ public class PagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            ArrayList<PhotoBean> list = getArguments().getParcelableArrayList(ARG_PARAM1);
-            index = getArguments().getInt(ARG_PARAM2);
+            photos = getArguments().getParcelableArrayList(ARG_PARAM1);
+            currentIndex = getArguments().getInt(ARG_PARAM2);
             mPagerAdapter = new MyPagerAdapter(this.getActivity());
-            mPagerAdapter.setAdapterList(list);
+            mPagerAdapter.setAdapterList(photos);
         } else {
             getActivity().onBackPressed();
+        }
+
+        if (null != photos) {
+            mSize = photos.size();
+        } else {
+            getActivity().onBackPressed();
+        }
+
+        if (savedInstanceState != null) {
+            currentIndex = savedInstanceState.getInt(SAVED_INDEX, 0);
         }
     }
 
@@ -68,51 +82,38 @@ public class PagerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
 
         // Inflate the layout for this fragment
-        ViewPager viewPager = view.findViewById(R.id.browseViewPager);
+        tvPagerIndex = view.findViewById(R.id.tv_pager_index);
+        mViewPager = view.findViewById(R.id.browseViewPager);
 
-        viewPager.setAdapter(mPagerAdapter);
-        viewPager.setCurrentItem(index);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(currentIndex);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentIndex = position;
+                tvPagerIndex.setText(getString(R.string.tips_pager_index, (position + 1), mSize));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        tvPagerIndex.setText(getString(R.string.tips_pager_index, (currentIndex + 1), mSize));
 
         return view;
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        currentIndex = mViewPager.getCurrentItem();
+        outState.putInt(SAVED_INDEX, currentIndex);
     }
 }
