@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,7 +27,9 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
 
     private MyPagerAdapter mPagerAdapter;
     private int currentIndex = 0;
-    private ViewPager viewPager;
+    private int mSize = 1;
+    private ViewPager mViewPager;
+    private TextView tvPagerIndex;
 
     public SoloPagerFragment() {
         // Required empty public constructor
@@ -63,8 +66,26 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
         View view = inflater.inflate(R.layout.fragment_solo_pager, container, false);
 
         // Inflate the layout for this fragment
-        viewPager = view.findViewById(R.id.viewPager);
-        viewPager.setAdapter(mPagerAdapter);
+        tvPagerIndex = view.findViewById(R.id.tv_pager_index);
+        mViewPager = view.findViewById(R.id.viewPager);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentIndex = position;
+                tvPagerIndex.setText(getString(R.string.tips_pager_index, (position + 1), mSize));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return view;
     }
@@ -78,13 +99,15 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        currentIndex = viewPager.getCurrentItem();
+        currentIndex = mViewPager.getCurrentItem();
         outState.putInt(SAVED_INDEX, currentIndex);
     }
 
     @Override
     public void onData(ArrayList<PhotoBean> photos) {
+        mSize = photos.size();
         mPagerAdapter.setAdapterList(photos);
-        if (currentIndex < photos.size()) viewPager.setCurrentItem(currentIndex);
+        if (currentIndex < mSize) mViewPager.setCurrentItem(currentIndex);
+        tvPagerIndex.setText(getString(R.string.tips_pager_index, (currentIndex + 1), mSize));
     }
 }

@@ -40,7 +40,7 @@ public class MyPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view = View.inflate(mContext, R.layout.item_view, null);
+        View view = View.inflate(mContext, R.layout.item_pager, null);
         PhotoView imageView = view.findViewById(R.id.content);
 
         if (list.get(position).getMediaType() == 3) {
