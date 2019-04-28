@@ -98,7 +98,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
 
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, TinyPlayFragment.newInstance(bean), "play")
+                    .replace(android.R.id.content, TinyPlayFragment.newInstance(bean, false), "play")
                     .addToBackStack(null)
                     .commit();
         }

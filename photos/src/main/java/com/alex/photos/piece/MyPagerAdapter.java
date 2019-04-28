@@ -48,7 +48,7 @@ public class MyPagerAdapter extends PagerAdapter {
             view.findViewById(R.id.action_play).setOnClickListener(v -> {
                 ((AppCompatActivity) mContext).getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(android.R.id.content, TinyPlayFragment.newInstance(list.get(position)), "play")
+                        .replace(android.R.id.content, TinyPlayFragment.newInstance(list.get(position), true), "play")
                         .addToBackStack(null)
                         .commit();
             });

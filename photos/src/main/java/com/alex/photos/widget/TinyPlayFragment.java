@@ -2,11 +2,13 @@ package com.alex.photos.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -24,11 +26,13 @@ import com.alex.photos.bean.PhotoBean;
  */
 public class TinyPlayFragment extends Fragment {
     private static final String KEY_MEDIA = "media";
+    private static final String KEY_DIALOG = "is_dialog";
     private PhotoBean bean;
     private OnToggleListener mListener;
     private MediaController mediaController;
     private VideoView mVideoView;
     private int lastSeek = 0;
+    private boolean isDialogStyle = false;
 
     public TinyPlayFragment() {
         // Required empty public constructor
@@ -41,10 +45,11 @@ public class TinyPlayFragment extends Fragment {
      * @param media Parameter 1.
      * @return A new instance of fragment TinyPlayFragment.
      */
-    public static TinyPlayFragment newInstance(PhotoBean media) {
+    public static TinyPlayFragment newInstance(PhotoBean media, boolean isDialogStyle) {
         TinyPlayFragment f = new TinyPlayFragment();
         Bundle b = new Bundle();
         b.putParcelable(KEY_MEDIA, media);
+        b.putBoolean(KEY_DIALOG, isDialogStyle);
         f.setArguments(b);
         return f;
     }
@@ -54,6 +59,7 @@ public class TinyPlayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             bean = getArguments().getParcelable(KEY_MEDIA);
+            isDialogStyle = getArguments().getBoolean(KEY_DIALOG);
             if (null == bean || null == bean.getPath()) {
                 new AlertDialog.Builder(getContext())
                         .setMessage("播放地址为空")
@@ -87,6 +93,19 @@ public class TinyPlayFragment extends Fragment {
             return true;
         });
         mVideoView = view.findViewById(R.id.video_view);
+        if (isDialogStyle) {
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mVideoView.getLayoutParams();
+            //获取屏幕方向
+            Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+            if (mConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                //竖屏
+                lp.setMargins(16, 16, 16, 16);
+            } else {
+                //横屏
+                lp.setMargins(46, 16, 46, 16);
+            }
+            mVideoView.setLayoutParams(lp);
+        }
         //将VideoView与MediaController进行关联
         mVideoView.setVideoPath(bean.getPath());
         mVideoView.setMediaController(mediaController);
