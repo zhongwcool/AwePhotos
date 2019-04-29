@@ -16,6 +16,7 @@ import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.widget.GalleryLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,7 +105,7 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> photos) {
+    public void onData(ArrayList<PhotoBean> photos, List<Integer> heads) {
         mSize = photos.size();
         mPagerAdapter.setAdapterList(photos);
         if (currentIndex < mSize) mViewPager.setCurrentItem(currentIndex);

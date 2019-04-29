@@ -16,6 +16,7 @@ import com.alex.photos.utils.DateUtils;
 import com.alex.photos.utils.FileUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -69,6 +70,7 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         ArrayList<PhotoBean> albumInfoList = new ArrayList<>();//所有文件夹
+        List<Integer> headPositions = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
@@ -92,7 +94,7 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
             albumInfoList.add(albumInfoBean);
         }
-        mLoader.onData(albumInfoList);
+        mLoader.onData(albumInfoList, headPositions);
         //cursor.close();
     }
 
@@ -102,6 +104,6 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     public interface LoadCallback {
-        void onData(ArrayList<PhotoBean> list);
+        void onData(ArrayList<PhotoBean> list, List<Integer> heads);
     }
 }

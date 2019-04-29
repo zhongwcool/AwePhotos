@@ -19,6 +19,7 @@ import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.widget.GalleryLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity implements GalleryLoader.LoadCallback {
     private MyFullGalleryAdapter adapter;
@@ -76,7 +77,7 @@ public class GalleryActivity extends AppCompatActivity implements GalleryLoader.
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> list) {
+    public void onData(ArrayList<PhotoBean> list, List<Integer> heads) {
         adapter.setAdapterList(list);
     }
 }

@@ -18,6 +18,7 @@ import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.widget.GalleryLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -75,13 +76,25 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
         // Set the adapter
         //获取屏幕方向
         Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+        GridLayoutManager gridLayoutManager;
         if (mConfiguration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             //竖屏
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
+            gridLayoutManager = new GridLayoutManager(getContext(), mColumnCount);
         } else {
             //横屏
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount * 2));
+            gridLayoutManager = new GridLayoutManager(getContext(), mColumnCount * 2);
         }
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (adapter.getItemViewType(position) == MyGalleryAdapter.HEAD_TYPE) {
+                    return gridLayoutManager.getSpanCount();
+                } else {
+                    return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -106,9 +119,9 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> list) {
+    public void onData(ArrayList<PhotoBean> list, List<Integer> headPositions) {
         loading.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
-        adapter.setAdapterList(list);
+        adapter.updateAdapterList(list, headPositions);
     }
 }
