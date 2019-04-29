@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,7 @@ import com.alex.photos.bean.PhotoBean;
  * create an instance of this fragment.
  */
 public class TinyPlayFragment extends Fragment {
+    private static final String SAVED_SEEK = "android:seek";
     private static final String KEY_MEDIA = "media";
     private static final String KEY_DIALOG = "is_dialog";
     private PhotoBean bean;
@@ -70,6 +70,10 @@ public class TinyPlayFragment extends Fragment {
             }
         }
         mediaController = new MediaController(getContext());
+
+        if (savedInstanceState != null) {
+            lastSeek = savedInstanceState.getInt(SAVED_SEEK, 0);
+        }
     }
 
     @Override
@@ -141,13 +145,19 @@ public class TinyPlayFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mVideoView.pause();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
         lastSeek = mVideoView.getCurrentPosition();
+        outState.putInt(SAVED_SEEK, lastSeek);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Toast.makeText(getActivity(), "退出播放", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "退出播放", Toast.LENGTH_SHORT).show();
     }
 
     @Override
