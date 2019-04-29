@@ -12,11 +12,15 @@ import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +31,15 @@ public class TinyPlayFragment extends Fragment {
     private static final String SAVED_SEEK = "android:seek";
     private static final String KEY_MEDIA = "media";
     private static final String KEY_DIALOG = "is_dialog";
+
+    public static final int UI_DIALOG = 0;
+    public static final int UI_NONE = 1;
+
+    @IntDef({UI_DIALOG, UI_NONE})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface Style {
+    }
+
     private PhotoBean bean;
     private OnToggleListener mListener;
     private MediaController mediaController;
@@ -45,11 +58,11 @@ public class TinyPlayFragment extends Fragment {
      * @param media Parameter 1.
      * @return A new instance of fragment TinyPlayFragment.
      */
-    public static TinyPlayFragment newInstance(PhotoBean media, boolean isDialogStyle) {
+    public static TinyPlayFragment newInstance(PhotoBean media, @Style int mode) {
         TinyPlayFragment f = new TinyPlayFragment();
         Bundle b = new Bundle();
         b.putParcelable(KEY_MEDIA, media);
-        b.putBoolean(KEY_DIALOG, isDialogStyle);
+        b.putInt(KEY_DIALOG, mode);
         f.setArguments(b);
         return f;
     }

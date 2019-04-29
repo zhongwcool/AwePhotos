@@ -37,7 +37,9 @@ public class DetailBottomDialogFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bean = getArguments().getParcelable(ARG_ALBUM_INFO);
+        if (getArguments() != null) {
+            bean = getArguments().getParcelable(ARG_ALBUM_INFO);
+        }
     }
 
     @Nullable

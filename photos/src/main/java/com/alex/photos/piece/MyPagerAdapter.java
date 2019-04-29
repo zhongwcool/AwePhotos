@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +12,15 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
+import com.alex.photos.utils.DateUtils;
 import com.alex.photos.widget.TinyPlayFragment;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.alex.photos.utils.FileUtils.getReadableSize;
 
 public class MyPagerAdapter extends PagerAdapter {
     private Context mContext;
@@ -40,23 +44,27 @@ public class MyPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        PhotoBean bean = list.get(position);
+
         View view = View.inflate(mContext, R.layout.item_pager, null);
         PhotoView imageView = view.findViewById(R.id.content);
-
-        if (list.get(position).getMediaType() == 3) {
-            view.findViewById(R.id.control).setVisibility(View.VISIBLE);
+        TextView detail = view.findViewById(R.id.tv_detail);
+        detail.setText(getDetail(bean));
+        if (bean.getMediaType() == 3) {
+            view.findViewById(R.id.play_control).setVisibility(View.VISIBLE);
             view.findViewById(R.id.action_play).setOnClickListener(v -> {
                 ((AppCompatActivity) mContext).getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(android.R.id.content, TinyPlayFragment.newInstance(list.get(position), true), "play")
+                        .replace(android.R.id.content, TinyPlayFragment.newInstance(bean, TinyPlayFragment.UI_DIALOG), "play")
                         .addToBackStack(null)
                         .commit();
             });
+
         } else {
-            view.findViewById(R.id.control).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.play_control).setVisibility(View.INVISIBLE);
         }
 
-        Uri mediaUri = Uri.parse("file://" + list.get(position).getPath());
+        Uri mediaUri = Uri.parse("file://" + bean.getPath());
         Glide.with(mContext)
                 .load(mediaUri)
                 .placeholder(R.drawable.placeholder)
@@ -84,5 +92,16 @@ public class MyPagerAdapter extends PagerAdapter {
 
     public View getPrimaryItem() {
         return view;
+    }
+
+    private String getDetail(PhotoBean bean) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(DateUtils.getFileTime(bean.getTime())).append("\n");
+        sb.append(bean.getWidth()).append("x").append(bean.getHeight()).append("    ").append(getReadableSize(bean.getSize())).append("\n");
+        if (bean.getMediaType() == 3) {
+            sb.append("时长 ").append(bean.getDuration());
+        }
+
+        return sb.toString();
     }
 }

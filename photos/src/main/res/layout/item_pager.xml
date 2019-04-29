@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/translucent">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/content"
@@ -11,7 +12,7 @@
         android:layout_gravity="center" />
 
     <LinearLayout
-        android:id="@+id/control"
+        android:id="@+id/play_control"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -26,6 +27,23 @@
             android:minWidth="35dp"
             android:minHeight="35dp"
             app:srcCompat="@drawable/ic_play_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/content"
+        android:background="@drawable/bg_linear_grey"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019年03月18日 星期一 18:28\n1920x1080 115 MB\n时长 10:03"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </RelativeLayout>

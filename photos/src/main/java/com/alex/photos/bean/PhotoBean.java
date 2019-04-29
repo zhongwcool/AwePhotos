@@ -11,6 +11,8 @@ public class PhotoBean implements Parcelable {
     private long time;
     private int mediaType;
     private long size;
+    private int height;
+    private int width;
     private int id;
     private String parentDir;
     private String duration;
@@ -21,7 +23,7 @@ public class PhotoBean implements Parcelable {
         this.time = time;
     }
 
-    public PhotoBean(String path, String name, long time, int mediaType, long size, int id, String parentDir, int dataType) {
+    public PhotoBean(String path, String name, long time, int mediaType, long size, int height, int width, int id, String parentDir, int dataType) {
         this.path = path;
         this.name = name;
         if (!TextUtils.isEmpty(name) && name.indexOf(".") != -1) {
@@ -32,6 +34,8 @@ public class PhotoBean implements Parcelable {
         this.time = time;
         this.mediaType = mediaType;
         this.size = size;
+        this.height = height;
+        this.width = width;
         this.id = id;
         this.parentDir = parentDir;
         this.dataType = dataType;
@@ -44,6 +48,8 @@ public class PhotoBean implements Parcelable {
         time = in.readLong();
         mediaType = in.readInt();
         size = in.readLong();
+        height = in.readInt();
+        width = in.readInt();
         id = in.readInt();
         parentDir = in.readString();
         duration = in.readString();
@@ -148,6 +154,14 @@ public class PhotoBean implements Parcelable {
         this.parentDir = parentDir;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -161,6 +175,8 @@ public class PhotoBean implements Parcelable {
         dest.writeLong(time);
         dest.writeInt(mediaType);
         dest.writeLong(size);
+        dest.writeInt(height);
+        dest.writeInt(width);
         dest.writeInt(id);
         dest.writeString(parentDir);
         dest.writeString(duration);

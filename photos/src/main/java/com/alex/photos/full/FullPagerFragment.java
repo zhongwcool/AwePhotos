@@ -44,7 +44,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_preview, null);
+        View view = inflater.inflate(R.layout.fragment_full_pager, null);
         mPlayVideo = view.findViewById(R.id.play_control);
         mPhotoView = view.findViewById(R.id.shot_view);
         mPlayVideo.setOnClickListener(this);
@@ -98,7 +98,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
 
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, TinyPlayFragment.newInstance(bean, false), "play")
+                    .replace(android.R.id.content, TinyPlayFragment.newInstance(bean, TinyPlayFragment.UI_NONE), "play")
                     .addToBackStack(null)
                     .commit();
         }

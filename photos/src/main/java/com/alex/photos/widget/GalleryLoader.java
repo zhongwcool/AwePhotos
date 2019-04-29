@@ -25,6 +25,8 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             MediaStore.Files.FileColumns.DATE_ADDED,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
             MediaStore.Files.FileColumns.SIZE,
+            MediaStore.Files.FileColumns.HEIGHT,
+            MediaStore.Files.FileColumns.WIDTH,
             MediaStore.Files.FileColumns._ID,
             MediaStore.Video.VideoColumns.DURATION,
             MediaStore.Files.FileColumns.PARENT};
@@ -57,7 +59,7 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 mContext,
                 queryUri,
                 MEDIA_PROJECTION,
-                selection1,
+                selection,
                 null, // Selection args (none).
                 MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
         );
@@ -74,11 +76,13 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             long dateTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED));
             int mediaType = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE));
             long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE));
+            int height = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.HEIGHT));
+            int width = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.WIDTH));
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID));
 
             //获取所在的文件夹
             String dirName = FileUtils.getParentFolderName(path);
-            PhotoBean albumInfoBean = new PhotoBean(path, name, dateTime, mediaType, size, id, dirName, 1);
+            PhotoBean albumInfoBean = new PhotoBean(path, name, dateTime, mediaType, size, height, width, id, dirName, 1);
 
             if (mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                 //处理视频的时长信息
