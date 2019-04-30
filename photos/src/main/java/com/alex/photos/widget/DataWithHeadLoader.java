@@ -86,7 +86,7 @@ public class DataWithHeadLoader implements LoaderManager.LoaderCallbacks<Cursor>
             boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
             if (!isToday) {
                 //添加头部
-                photoList.add(new PhotoBean(0, dateTime));
+                photoList.add(new PhotoBean(PhotoBean.TYPE_HEAD, dateTime));
                 allLastDate = dateTime + "";
 
                 headList.add(photoList.size() - 1);

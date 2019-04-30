@@ -87,7 +87,7 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (adapter.getItemViewType(position) == MyGalleryAdapter.HEAD_TYPE) {
+                if (adapter.getItemViewType(position) == PhotoBean.TYPE_HEAD) {
                     return gridLayoutManager.getSpanCount();
                 } else {
                     return 1;

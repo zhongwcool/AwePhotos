@@ -4,7 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import androidx.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 public class PhotoBean implements Parcelable {
+    public static final int TYPE_HEAD = 0;
+    public static final int TYPE_BODY = 1;
+
+    @IntDef({TYPE_HEAD, TYPE_BODY})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DataType {
+    }
+
     private String path;
     private String name;
     private String extension;
@@ -16,10 +29,10 @@ public class PhotoBean implements Parcelable {
     private int id;
     private String parentDir;
     private String duration;
-    private int dataType = 1; //0 头部  ； 1  数据
+    private int dataType = TYPE_BODY; //0 头部; 1  数据
 
-    public PhotoBean(int dataType, long time) {
-        this.dataType = dataType;
+    public PhotoBean(@DataType int type, long time) {
+        this.dataType = type;
         this.time = time;
     }
 
@@ -67,12 +80,13 @@ public class PhotoBean implements Parcelable {
         }
     };
 
+    @DataType
     public int getDataType() {
         return dataType;
     }
 
-    public void setDataType(int dataType) {
-        dataType = dataType;
+    public void setDataType(@DataType int type) {
+        this.dataType = type;
     }
 
     public String getDuration() {
@@ -110,7 +124,6 @@ public class PhotoBean implements Parcelable {
         } else {
             this.extension = "null";
         }
-
     }
 
     public long getTime() {

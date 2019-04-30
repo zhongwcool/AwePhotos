@@ -25,8 +25,6 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link PhotoBean}
  */
 public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public static final int HEAD_TYPE = 0;
-    public static final int BODY_TYPE = 1;
     private ArrayList<PhotoBean> mShowItems = new ArrayList<>();
     private List<Integer> mHeadPositionList = new ArrayList<>();
     private Context mContext;
@@ -43,7 +41,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == BODY_TYPE) {
+        if (viewType == PhotoBean.TYPE_BODY) {
             return new BodyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_media, null));
         } else {
             return new HeadViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_head, null));
@@ -132,7 +130,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public ArrayList<PhotoBean> getAllDataNoHead() {
         ArrayList<PhotoBean> mAllItems = new ArrayList<>();
         for (int i = 0; i < mShowItems.size(); i++) {
-            if (mShowItems.get(i).getDataType() == BODY_TYPE) {
+            if (mShowItems.get(i).getDataType() == PhotoBean.TYPE_BODY) {
                 mAllItems.add(mShowItems.get(i));
             }
         }
