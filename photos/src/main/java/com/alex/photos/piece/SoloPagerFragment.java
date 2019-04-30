@@ -13,17 +13,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.widget.GalleryLoader;
+import com.alex.photos.widget.DataLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SoloPagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCallback {
+public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallback {
     private static final String SAVED_INDEX = "android:index";
 
     private MyPagerAdapter mPagerAdapter;
@@ -94,7 +93,7 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     @Override
     public void onStart() {
         super.onStart();
-        LoaderManager.getInstance(this).restartLoader(1, null, new GalleryLoader(getContext(), this));
+        LoaderManager.getInstance(this).restartLoader(1, null, new DataLoader(getContext(), this));
     }
 
     @Override
@@ -105,7 +104,7 @@ public class SoloPagerFragment extends Fragment implements GalleryLoader.LoadCal
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> photos, List<Integer> heads) {
+    public void onData(ArrayList<PhotoBean> photos) {
         mSize = photos.size();
         mPagerAdapter.setAdapterList(photos);
         if (currentIndex < mSize) mViewPager.setCurrentItem(currentIndex);

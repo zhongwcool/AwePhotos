@@ -6,6 +6,7 @@
 
     <color name="colorSpaceView">#FAFAFA</color>
     <color name="black_overlay">#66000000</color>
+    <color name="white_overlay">#AAFFFFFF</color>
     <color name="bg_dialog">#666F6F6F</color>
     <color name="translucent">#66000000</color>
     <color name="black">#FF000000</color>

@@ -18,7 +18,7 @@ import com.alex.photos.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DataWithHeadLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private String[] MEDIA_PROJECTION = {
             MediaStore.Files.FileColumns.DATA,
@@ -34,7 +34,7 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     private Context mContext;
     private LoadCallback mLoader;
 
-    public GalleryLoader(Context context, LoadCallback callback) {
+    public DataWithHeadLoader(Context context, LoadCallback callback) {
         this.mContext = context;
 
         if (null != callback) {
@@ -69,8 +69,9 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        ArrayList<PhotoBean> albumInfoList = new ArrayList<>();//所有文件夹
-        List<Integer> headPositions = new ArrayList<>();
+        ArrayList<PhotoBean> photoList = new ArrayList<>();//所有文件
+        List<Integer> headList = new ArrayList<>();
+        String allLastDate = "0";
 
         while (cursor.moveToNext()) {
             String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
@@ -82,19 +83,28 @@ public class GalleryLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             int width = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.WIDTH));
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID));
 
+            boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
+            if (!isToday) {
+                //添加头部
+                photoList.add(new PhotoBean(0, dateTime));
+                allLastDate = dateTime + "";
+
+                headList.add(photoList.size() - 1);
+            }
+
             //获取所在的文件夹
             String dirName = FileUtils.getParentFolderName(path);
-            PhotoBean albumInfoBean = new PhotoBean(path, name, dateTime, mediaType, size, height, width, id, dirName, 1);
+            PhotoBean photoBean = new PhotoBean(path, name, dateTime, mediaType, size, height, width, id, dirName);
 
             if (mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                 //处理视频的时长信息
                 long duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION));
-                albumInfoBean.setDuration(DateUtils.stringForTime(duration));
+                photoBean.setDuration(DateUtils.stringForTime(duration));
             }
-
-            albumInfoList.add(albumInfoBean);
+            //添加Body
+            photoList.add(photoBean);
         }
-        mLoader.onData(albumInfoList, headPositions);
+        mLoader.onData(photoList, headList);
         //cursor.close();
     }
 

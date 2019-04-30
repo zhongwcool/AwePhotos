@@ -13,14 +13,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.utils.DateUtils;
+import com.alex.photos.utils.FileUtils;
 import com.alex.photos.widget.TinyPlayFragment;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.alex.photos.utils.FileUtils.getReadableSize;
 
 public class MyPagerAdapter extends PagerAdapter {
     private Context mContext;
@@ -59,7 +58,6 @@ public class MyPagerAdapter extends PagerAdapter {
                         .addToBackStack(null)
                         .commit();
             });
-
         } else {
             view.findViewById(R.id.play_control).setVisibility(View.INVISIBLE);
         }
@@ -97,7 +95,7 @@ public class MyPagerAdapter extends PagerAdapter {
     private String getDetail(PhotoBean bean) {
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtils.getFileTime(bean.getTime())).append("\n");
-        sb.append(bean.getWidth()).append("x").append(bean.getHeight()).append("    ").append(getReadableSize(bean.getSize())).append("\n");
+        sb.append(bean.getWidth()).append("x").append(bean.getHeight()).append("    ").append(FileUtils.getReadableSize(bean.getSize())).append("\n");
         if (bean.getMediaType() == 3) {
             sb.append("时长 ").append(bean.getDuration());
         }

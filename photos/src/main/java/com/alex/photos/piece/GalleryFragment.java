@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.widget.GalleryLoader;
+import com.alex.photos.widget.DataWithHeadLoader;
+import com.alex.photos.widget.FlowHeadItemDecoration;
+import com.alex.photos.widget.HeadItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,10 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link GalleryLoader.LoadCallback}
+ * Activities containing this fragment MUST implement the {@link DataWithHeadLoader.LoadCallback}
  * interface.
  */
-public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallback {
+public class GalleryFragment extends Fragment implements DataWithHeadLoader.LoadCallback {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
@@ -69,9 +71,7 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-
         loading = view.findViewById(R.id.progress);
-
         recyclerView = view.findViewById(R.id.list);
         // Set the adapter
         //获取屏幕方向
@@ -95,6 +95,8 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.addItemDecoration(new HeadItemDecoration(getActivity()));
+        recyclerView.addItemDecoration(new FlowHeadItemDecoration(getActivity(), adapter));
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -105,7 +107,7 @@ public class GalleryFragment extends Fragment implements GalleryLoader.LoadCallb
         super.onStart();
         recyclerView.setVisibility(View.INVISIBLE);
         loading.setVisibility(View.VISIBLE);
-        LoaderManager.getInstance(this).restartLoader(1, null, new GalleryLoader(getContext(), this));
+        LoaderManager.getInstance(this).restartLoader(1, null, new DataWithHeadLoader(getContext(), this));
     }
 
     @Override

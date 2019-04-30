@@ -4,7 +4,7 @@
     <!-- 渐变色 -->
     <gradient
         android:angle="180"
-        android:centerColor="@color/bg_dialog"
+        android:centerColor="@color/translucent"
         android:endColor="@android:color/transparent"
         android:startColor="@android:color/transparent"
         android:type="linear" />

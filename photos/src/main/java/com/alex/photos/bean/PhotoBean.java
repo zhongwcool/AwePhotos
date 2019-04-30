@@ -16,14 +16,14 @@ public class PhotoBean implements Parcelable {
     private int id;
     private String parentDir;
     private String duration;
-    private int dataType = 0; //0 头部  ； 1  数据
+    private int dataType = 1; //0 头部  ； 1  数据
 
     public PhotoBean(int dataType, long time) {
         this.dataType = dataType;
         this.time = time;
     }
 
-    public PhotoBean(String path, String name, long time, int mediaType, long size, int height, int width, int id, String parentDir, int dataType) {
+    public PhotoBean(String path, String name, long time, int mediaType, long size, int height, int width, int id, String parentDir) {
         this.path = path;
         this.name = name;
         if (!TextUtils.isEmpty(name) && name.indexOf(".") != -1) {
@@ -38,7 +38,6 @@ public class PhotoBean implements Parcelable {
         this.width = width;
         this.id = id;
         this.parentDir = parentDir;
-        this.dataType = dataType;
     }
 
     protected PhotoBean(Parcel in) {

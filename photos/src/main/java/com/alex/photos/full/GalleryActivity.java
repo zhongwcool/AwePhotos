@@ -16,12 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.widget.GalleryLoader;
+import com.alex.photos.widget.DataLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class GalleryActivity extends AppCompatActivity implements GalleryLoader.LoadCallback {
+public class GalleryActivity extends AppCompatActivity implements DataLoader.LoadCallback {
     private MyFullGalleryAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -73,11 +72,11 @@ public class GalleryActivity extends AppCompatActivity implements GalleryLoader.
     protected void onStart() {
         super.onStart();
 
-        LoaderManager.getInstance(this).restartLoader(1, null, new GalleryLoader(this, this));
+        LoaderManager.getInstance(this).restartLoader(1, null, new DataLoader(this, this));
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> list, List<Integer> heads) {
+    public void onData(ArrayList<PhotoBean> list) {
         adapter.setAdapterList(list);
     }
 }

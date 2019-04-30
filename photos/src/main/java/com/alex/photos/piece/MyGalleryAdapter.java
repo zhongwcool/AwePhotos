@@ -35,15 +35,18 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mContext = context;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return mShowItems.get(position).getDataType();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == HEAD_TYPE) {
-            return new HeadViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_head, null));
-        } else if (viewType == BODY_TYPE) {
+        if (viewType == BODY_TYPE) {
             return new BodyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_media, null));
         } else {
-            return null;
+            return new HeadViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_head, null));
         }
     }
 
@@ -72,7 +75,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             ((BodyViewHolder) holder).mView.setOnClickListener(v -> {
                 ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, PagerFragment.newInstance(mShowItems, position), "pager")
+                        .replace(android.R.id.content, PagerFragment.newInstance(getAllDataNoHead(), trimPosition(position)), "pager")
                         .addToBackStack(null)
                         .commit();
             });
@@ -94,8 +97,17 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public List<Integer> getHeadPositionList() {
-        return mHeadPositionList;
+    public int trimPosition(int position_with_head) {
+        int count = 0;
+        for (int i = 0; i < mHeadPositionList.size(); i++) {
+            if (position_with_head > mHeadPositionList.get(i)) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        return position_with_head - count;
     }
 
     /**
@@ -117,8 +129,8 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return count;
     }
 
-    public List<PhotoBean> getAllDataNoHead() {
-        List<PhotoBean> mAllItems = new ArrayList<>();
+    public ArrayList<PhotoBean> getAllDataNoHead() {
+        ArrayList<PhotoBean> mAllItems = new ArrayList<>();
         for (int i = 0; i < mShowItems.size(); i++) {
             if (mShowItems.get(i).getDataType() == BODY_TYPE) {
                 mAllItems.add(mShowItems.get(i));
@@ -132,8 +144,8 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class BodyViewHolder extends RecyclerView.ViewHolder {
-        private final View mView;
-        private final ImageView mContentView;
+        private View mView;
+        private ImageView mContentView;
         private TextView mTvVideoTime;
         private RelativeLayout mRlGifInfo;
         private RelativeLayout mRlVideoInfo;
@@ -155,12 +167,17 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class HeadViewHolder extends RecyclerView.ViewHolder {
+        private TextView mTvTitle;
 
-        TextView mTvTitle;
-
-        HeadViewHolder(View itemView) {
+        private HeadViewHolder(View itemView) {
             super(itemView);
             mTvTitle = itemView.findViewById(R.id.tv_title);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return super.toString() + " '" + mTvTitle.getText() + "'";
         }
     }
 }

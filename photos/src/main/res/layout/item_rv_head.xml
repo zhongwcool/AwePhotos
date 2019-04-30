@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:background="@color/white_overlay"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        android:textColor="@color/googleBlue"
-        android:textSize="18sp" />
-
-
+        android:padding="5dp"
+        tools:text="2019-01-01" />
 </LinearLayout>
