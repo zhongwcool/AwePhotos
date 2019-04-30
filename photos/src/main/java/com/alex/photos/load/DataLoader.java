@@ -1,4 +1,4 @@
-package com.alex.photos.widget;
+package com.alex.photos.load;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -59,7 +59,7 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 mContext,
                 queryUri,
                 MEDIA_PROJECTION,
-                selection,
+                selection1,
                 null, // Selection args (none).
                 MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
         );

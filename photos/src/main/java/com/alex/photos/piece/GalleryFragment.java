@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.widget.DataWithHeadLoader;
-import com.alex.photos.widget.FlowHeadItemDecoration;
-import com.alex.photos.widget.HeadItemDecoration;
+import com.alex.photos.decoration.FlowHeadItemDecoration;
+import com.alex.photos.decoration.HeadItemDecoration;
+import com.alex.photos.load.DataWithHeadLoader;
 
 import java.util.ArrayList;
 import java.util.List;

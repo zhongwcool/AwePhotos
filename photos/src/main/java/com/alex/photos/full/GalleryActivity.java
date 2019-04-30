@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
-import com.alex.photos.widget.DataLoader;
+import com.alex.photos.load.DataLoader;
 
 import java.util.ArrayList;
 

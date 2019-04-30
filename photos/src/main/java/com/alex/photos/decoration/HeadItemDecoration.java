@@ -1,4 +1,4 @@
-package com.alex.photos.widget;
+package com.alex.photos.decoration;
 
 import android.content.Context;
 import android.content.res.TypedArray;
