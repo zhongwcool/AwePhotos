@@ -65,7 +65,7 @@ public class MyPagerAdapter extends PagerAdapter {
         Uri mediaUri = Uri.parse("file://" + bean.getPath());
         Glide.with(mContext)
                 .load(mediaUri)
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.img_place_holder)
                 .into(imageView);
 
         container.addView(view);

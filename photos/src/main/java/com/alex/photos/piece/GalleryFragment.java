@@ -32,7 +32,8 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
-    private View loading;
+    private View MLoadingView;
+    private View mNoDataView;
     private RecyclerView recyclerView;
 
     /**
@@ -71,8 +72,10 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        loading = view.findViewById(R.id.progress);
+        MLoadingView = view.findViewById(R.id.progress);
+        mNoDataView = view.findViewById(R.id.iv_no_data);
         recyclerView = view.findViewById(R.id.list);
+        view.findViewById(R.id.action_close).setOnClickListener(v -> getActivity().onBackPressed());
         // Set the adapter
         //获取屏幕方向
         Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
@@ -106,7 +109,7 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
     public void onStart() {
         super.onStart();
         recyclerView.setVisibility(View.INVISIBLE);
-        loading.setVisibility(View.VISIBLE);
+        MLoadingView.setVisibility(View.VISIBLE);
         LoaderManager.getInstance(this).restartLoader(1, null, new DataWithHeadLoader(getContext(), this));
     }
 
@@ -122,8 +125,12 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
 
     @Override
     public void onData(ArrayList<PhotoBean> list, List<Integer> headPositions) {
-        loading.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        MLoadingView.setVisibility(View.GONE);
+        if (list.size() >= 1) {
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            mNoDataView.setVisibility(View.VISIBLE);
+        }
         adapter.updateAdapterList(list, headPositions);
     }
 }

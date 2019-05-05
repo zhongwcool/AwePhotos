@@ -15,7 +15,7 @@ public class PhotoBean implements Parcelable {
 
     @IntDef({TYPE_HEAD, TYPE_BODY})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface DataType {
+    @interface DataType {
     }
 
     private String path;
@@ -39,7 +39,7 @@ public class PhotoBean implements Parcelable {
     public PhotoBean(String path, String name, long time, int mediaType, long size, int height, int width, int id, String parentDir) {
         this.path = path;
         this.name = name;
-        if (!TextUtils.isEmpty(name) && name.indexOf(".") != -1) {
+        if (!TextUtils.isEmpty(name) && name.contains(".")) {
             this.extension = name.substring(name.lastIndexOf("."));
         } else {
             this.extension = "null";
