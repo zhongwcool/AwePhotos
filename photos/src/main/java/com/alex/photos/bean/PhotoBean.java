@@ -9,7 +9,7 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class PhotoBean implements Parcelable {
+public class PhotoBean implements Parcelable, Cloneable {
     public static final int TYPE_HEAD = 0;
     public static final int TYPE_BODY = 1;
 
@@ -193,5 +193,15 @@ public class PhotoBean implements Parcelable {
         dest.writeString(parentDir);
         dest.writeString(duration);
         dest.writeInt(dataType);
+    }
+
+    public Object clone() {
+        Object obj = null;
+        try {
+            obj = super.clone();
+        } catch (CloneNotSupportedException ex) {
+            ex.printStackTrace();
+        }
+        return obj;
     }
 }

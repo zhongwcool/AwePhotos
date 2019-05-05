@@ -17,7 +17,8 @@ import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.decoration.FlowHeadItemDecoration;
 import com.alex.photos.decoration.HeadItemDecoration;
-import com.alex.photos.load.DataWithHeadLoader;
+import com.alex.photos.load.DataLoader;
+import com.alex.photos.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,10 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link DataWithHeadLoader.LoadCallback}
+ * Activities containing this fragment MUST implement the {@link DataLoader.LoadCallback}
  * interface.
  */
-public class GalleryFragment extends Fragment implements DataWithHeadLoader.LoadCallback {
+public class GalleryFragment extends Fragment implements DataLoader.LoadCallback {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
@@ -110,7 +111,7 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
         super.onStart();
         recyclerView.setVisibility(View.INVISIBLE);
         MLoadingView.setVisibility(View.VISIBLE);
-        LoaderManager.getInstance(this).restartLoader(1, null, new DataWithHeadLoader(getContext(), this));
+        LoaderManager.getInstance(this).restartLoader(1, null, new DataLoader(getContext(), this));
     }
 
     @Override
@@ -124,13 +125,36 @@ public class GalleryFragment extends Fragment implements DataWithHeadLoader.Load
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> list, List<Integer> headPositions) {
+    public void onData(ArrayList<PhotoBean> list) {
         MLoadingView.setVisibility(View.GONE);
         if (list.size() >= 1) {
             recyclerView.setVisibility(View.VISIBLE);
         } else {
             mNoDataView.setVisibility(View.VISIBLE);
         }
-        adapter.updateAdapterList(list, headPositions);
+        generateDataWithHead(list);
+    }
+
+    private void generateDataWithHead(ArrayList<PhotoBean> list) {
+        ArrayList<PhotoBean> photoList = new ArrayList<>();//所有文件
+        List<Integer> headList = new ArrayList<>();
+        String allLastDate = "0";
+
+        for (PhotoBean bean : list) {
+            long dateTime = bean.getTime();
+            boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
+            if (!isToday) {
+                //添加头部
+                photoList.add(new PhotoBean(PhotoBean.TYPE_HEAD, dateTime));
+                allLastDate = dateTime + "";
+
+                headList.add(photoList.size() - 1);
+            }
+
+            //添加Body
+            photoList.add((PhotoBean) bean.clone());
+        }
+
+        adapter.updateAdapterList(photoList, headList);
     }
 }
