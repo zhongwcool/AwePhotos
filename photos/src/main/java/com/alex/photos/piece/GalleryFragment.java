@@ -2,6 +2,7 @@ package com.alex.photos.piece;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.alex.photos.decoration.HeadItemDecoration;
 import com.alex.photos.load.DataLoader;
 import com.alex.photos.utils.DateUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 4;
     private MyGalleryAdapter adapter;
-    private View MLoadingView;
+    private View mLoadingView;
     private View mNoDataView;
     private RecyclerView recyclerView;
 
@@ -73,7 +75,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        MLoadingView = view.findViewById(R.id.progress);
+        mLoadingView = view.findViewById(R.id.progress);
         mNoDataView = view.findViewById(R.id.iv_no_data);
         recyclerView = view.findViewById(R.id.list);
         view.findViewById(R.id.action_close).setOnClickListener(v -> getActivity().onBackPressed());
@@ -110,7 +112,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     public void onStart() {
         super.onStart();
         recyclerView.setVisibility(View.INVISIBLE);
-        MLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.setVisibility(View.VISIBLE);
         LoaderManager.getInstance(this).restartLoader(1, null, new DataLoader(getContext(), this));
     }
 
@@ -126,35 +128,54 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
 
     @Override
     public void onData(ArrayList<PhotoBean> list) {
-        MLoadingView.setVisibility(View.GONE);
-        if (list.size() >= 1) {
-            recyclerView.setVisibility(View.VISIBLE);
-        } else {
-            mNoDataView.setVisibility(View.VISIBLE);
-        }
-        generateDataWithHead(list);
+        new MyAsyncTask(this).execute(list);
     }
 
-    private void generateDataWithHead(ArrayList<PhotoBean> list) {
+    private static class MyAsyncTask extends AsyncTask<ArrayList<PhotoBean>, Void, Void> {
+        private WeakReference<GalleryFragment> weakRef;
         ArrayList<PhotoBean> photoList = new ArrayList<>();//所有文件
         List<Integer> headList = new ArrayList<>();
-        String allLastDate = "0";
 
-        for (PhotoBean bean : list) {
-            long dateTime = bean.getTime();
-            boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
-            if (!isToday) {
-                //添加头部
-                photoList.add(new PhotoBean(PhotoBean.TYPE_HEAD, dateTime));
-                allLastDate = dateTime + "";
-
-                headList.add(photoList.size() - 1);
-            }
-
-            //添加Body
-            photoList.add((PhotoBean) bean.clone());
+        public MyAsyncTask(GalleryFragment fragment) {
+            weakRef = new WeakReference<>(fragment);
         }
 
-        adapter.updateAdapterList(photoList, headList);
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(ArrayList<PhotoBean>... params) {
+            String allLastDate = "0";
+
+            for (PhotoBean bean : params[0]) {
+                long dateTime = bean.getTime();
+                boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
+                if (!isToday) {
+                    //添加头部
+                    photoList.add(new PhotoBean(PhotoBean.TYPE_HEAD, dateTime));
+                    allLastDate = dateTime + "";
+
+                    headList.add(photoList.size() - 1);
+                }
+
+                //添加Body
+                photoList.add((PhotoBean) bean.clone());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            GalleryFragment fragment = weakRef.get();
+            if (null == fragment) return;
+
+            fragment.mLoadingView.setVisibility(View.GONE);
+            if (photoList.size() >= 1) {
+                fragment.recyclerView.setVisibility(View.VISIBLE);
+            } else {
+                fragment.mNoDataView.setVisibility(View.VISIBLE);
+            }
+            fragment.adapter.updateAdapterList(photoList, headList);
+        }
     }
 }

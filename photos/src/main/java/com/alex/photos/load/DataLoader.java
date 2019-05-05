@@ -59,7 +59,7 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 mContext,
                 queryUri,
                 MEDIA_PROJECTION,
-                selection1,
+                selection,
                 null, // Selection args (none).
                 MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
         );
