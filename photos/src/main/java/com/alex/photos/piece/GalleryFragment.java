@@ -2,8 +2,9 @@ package com.alex.photos.piece;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import com.alex.photos.decoration.HeadItemDecoration;
 import com.alex.photos.load.DataLoader;
 import com.alex.photos.utils.DateUtils;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     private View mLoadingView;
     private View mNoDataView;
     private RecyclerView recyclerView;
+    private Handler mHandler;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,6 +70,8 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
         if (null == adapter) {
             adapter = new MyGalleryAdapter(getActivity());
         }
+
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -127,25 +130,34 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     }
 
     @Override
-    public void onData(ArrayList<PhotoBean> list) {
-        new MyAsyncTask(this).execute(list);
+    public void onPause() {
+        super.onPause();
     }
 
-    private static class MyAsyncTask extends AsyncTask<ArrayList<PhotoBean>, Void, Void> {
-        private WeakReference<GalleryFragment> weakRef;
-        ArrayList<PhotoBean> photoList = new ArrayList<>();//所有文件
-        List<Integer> headList = new ArrayList<>();
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 
-        public MyAsyncTask(GalleryFragment fragment) {
-            weakRef = new WeakReference<>(fragment);
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(ArrayList<PhotoBean>... params) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler = null;
+    }
+
+    @Override
+    public void onData(ArrayList<PhotoBean> list) {
+        mHandler.post(() -> {
+            ArrayList<PhotoBean> photoList = new ArrayList<>();//所有文件
+            List<Integer> headList = new ArrayList<>();
             String allLastDate = "0";
 
-            for (PhotoBean bean : params[0]) {
+            for (PhotoBean bean : list) {
                 long dateTime = bean.getTime();
                 boolean isToday = DateUtils.isToday(allLastDate, dateTime + "");
                 if (!isToday) {
@@ -160,22 +172,13 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
                 photoList.add((PhotoBean) bean.clone());
             }
 
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            GalleryFragment fragment = weakRef.get();
-            if (null == fragment) return;
-
-            fragment.mLoadingView.setVisibility(View.GONE);
+            mLoadingView.setVisibility(View.GONE);
             if (photoList.size() >= 1) {
-                fragment.recyclerView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
             } else {
-                fragment.mNoDataView.setVisibility(View.VISIBLE);
+                mNoDataView.setVisibility(View.VISIBLE);
             }
-            fragment.adapter.updateAdapterList(photoList, headList);
-        }
+            adapter.updateAdapterList(photoList, headList);
+        });
     }
 }
