@@ -1,6 +1,7 @@
 package com.alex.photos.piece;
 
 import android.content.Context;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.utils.DateUtils;
+import com.alex.photos.utils.ExifUtil;
 import com.alex.photos.utils.FileUtils;
 import com.alex.photos.widget.TinyPlayFragment;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,8 +99,15 @@ public class MyPagerAdapter extends PagerAdapter {
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtils.getFileTime(bean.getTime())).append("\n");
         sb.append(bean.getWidth()).append("x").append(bean.getHeight()).append("    ").append(FileUtils.getReadableSize(bean.getSize())).append("\n");
+        try {
+            ExifInterface exifInterface = new ExifInterface(bean.getPath());
+            String device = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+            sb.append("设备: ").append(null == device ? "未记录" : ExifUtil.hexStr2Str(device)).append("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (bean.getMediaType() == 3) {
-            sb.append("时长 ").append(bean.getDuration());
+            sb.append("时长: ").append(bean.getDuration());
         }
 
         return sb.toString();
