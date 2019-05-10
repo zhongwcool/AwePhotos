@@ -1,14 +1,15 @@
 package com.alex.photos.piece;
 
 import android.content.Context;
-import android.media.ExifInterface;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.alex.photos.R;
@@ -99,15 +100,17 @@ public class MyPagerAdapter extends PagerAdapter {
         StringBuilder sb = new StringBuilder();
         sb.append(DateUtils.getFileTime(bean.getTime())).append("\n");
         sb.append(bean.getWidth()).append("x").append(bean.getHeight()).append("    ").append(FileUtils.getReadableSize(bean.getSize())).append("\n");
-        try {
-            ExifInterface exifInterface = new ExifInterface(bean.getPath());
-            String device = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
-            sb.append("设备: ").append(null == device ? "未记录" : ExifUtil.hexStr2Str(device)).append("\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (bean.getMediaType() == 3) {
+
+        if (bean.getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
             sb.append("时长: ").append(bean.getDuration());
+        } else {
+            try {
+                ExifInterface exifInterface = new ExifInterface(bean.getPath());
+                String device = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+                sb.append("设备: ").append(null == device ? "未记录" : ExifUtil.hexStr2Str(device)).append("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return sb.toString();
