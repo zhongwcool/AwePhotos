@@ -32,7 +32,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/content"
+        android:layout_alignParentEnd="true"
         android:background="@drawable/bg_linear_grey"
         android:orientation="vertical"
         android:padding="10dp">
@@ -44,6 +44,23 @@
             android:text="2019年03月18日 星期一 18:28\n1920x1080 115 MB\n时长 10:03"
             android:textColor="@color/white"
             android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/share_control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="35dp"
+            android:minHeight="35dp"
+            app:srcCompat="@drawable/ic_action_share" />
     </LinearLayout>
 
 </RelativeLayout>

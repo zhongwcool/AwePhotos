@@ -66,14 +66,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.tv_model_2: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, GalleryFragment.newInstance(4), "gallery")
+                        .replace(android.R.id.content, GalleryFragment.newInstance(4).withShare(false), "gallery")
                         .addToBackStack(null)
                         .commit();
             }
             break;
             case R.id.tv_model_3: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, SoloPagerFragment.newInstance(), "solo-pager")
+                        .replace(android.R.id.content, SoloPagerFragment.newInstance().withShare(true), "solo-pager")
                         .addToBackStack(null)
                         .commit();
             }

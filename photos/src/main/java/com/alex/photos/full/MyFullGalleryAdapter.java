@@ -2,6 +2,7 @@ package com.alex.photos.full;
 
 import android.content.Context;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ public class MyFullGalleryAdapter extends RecyclerView.Adapter<MyFullGalleryAdap
 
     private ArrayList<PhotoBean> mValues = new ArrayList<>();
     private Context mContext;
-    private boolean isLand;
 
     public MyFullGalleryAdapter(Context context) {
         this.mContext = context;
@@ -47,7 +47,7 @@ public class MyFullGalleryAdapter extends RecyclerView.Adapter<MyFullGalleryAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        if (holder.mItem.getMediaType() == 3) {
+        if (holder.mItem.getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
             holder.mRlGifInfo.setVisibility(View.INVISIBLE);
             holder.mRlVideoInfo.setVisibility(View.VISIBLE);
             holder.mTvVideoTime.setText(holder.mItem.getDuration());

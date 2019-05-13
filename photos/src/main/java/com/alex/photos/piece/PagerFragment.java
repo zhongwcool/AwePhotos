@@ -1,5 +1,6 @@
 package com.alex.photos.piece;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ public class PagerFragment extends Fragment {
     private TextView tvPagerIndex;
     private ViewPager mViewPager;
     private ArrayList<PhotoBean> photos;
+    private boolean isEnableShare = false;
 
     public PagerFragment() {
         // Required empty public constructor
@@ -53,22 +55,30 @@ public class PagerFragment extends Fragment {
         return fragment;
     }
 
+    public PagerFragment withShare(boolean withShare) {
+        isEnableShare = withShare;
+        return this;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Activity act = getActivity();
+
         if (getArguments() != null) {
             photos = getArguments().getParcelableArrayList(ARG_PARAM1);
             currentIndex = getArguments().getInt(ARG_PARAM2);
             mPagerAdapter = new MyPagerAdapter(this.getActivity());
             mPagerAdapter.setAdapterList(photos);
+            mPagerAdapter.setEnableShare(isEnableShare);
         } else {
-            getActivity().onBackPressed();
+            if (null != act) act.onBackPressed();
         }
 
         if (null != photos) {
             mSize = photos.size();
         } else {
-            getActivity().onBackPressed();
+            if (null != act) act.onBackPressed();
         }
 
         if (savedInstanceState != null) {
@@ -84,10 +94,8 @@ public class PagerFragment extends Fragment {
         // Inflate the layout for this fragment
         tvPagerIndex = view.findViewById(R.id.tv_pager_index);
         mViewPager = view.findViewById(R.id.browseViewPager);
-
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(currentIndex);
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

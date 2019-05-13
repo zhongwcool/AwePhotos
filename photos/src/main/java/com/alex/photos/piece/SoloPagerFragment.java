@@ -30,6 +30,7 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
     private int mSize = 1;
     private ViewPager mViewPager;
     private TextView tvPagerIndex;
+    private boolean isEnableShare = false;
 
     public SoloPagerFragment() {
         // Required empty public constructor
@@ -48,6 +49,11 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
         return fragment;
     }
 
+    public SoloPagerFragment withShare(boolean withShare) {
+        isEnableShare = withShare;
+        return this;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,7 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
         }
 
         mPagerAdapter = new MyPagerAdapter(this.getActivity());
+        mPagerAdapter.setEnableShare(isEnableShare);
     }
 
     @Override

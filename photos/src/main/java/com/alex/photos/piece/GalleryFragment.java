@@ -39,6 +39,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     private View mNoDataView;
     private RecyclerView recyclerView;
     private Handler mHandler;
+    private boolean isEnableShare = false;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,6 +57,11 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
         return fragment;
     }
 
+    public GalleryFragment withShare(boolean withShare) {
+        isEnableShare = withShare;
+        return this;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +75,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
 
         if (null == adapter) {
             adapter = new MyGalleryAdapter(getActivity());
+            adapter.setEnableShare(isEnableShare);
         }
 
         mHandler = new Handler(Looper.getMainLooper());

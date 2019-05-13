@@ -2,6 +2,7 @@ package com.alex.photos.full;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class FullPagerFragment extends BaseFragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (bean.getMediaType() == 3) {
+        if (bean.getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
             mPlayVideo.setVisibility(View.VISIBLE);
         } else {
             mPlayVideo.setVisibility(View.GONE);

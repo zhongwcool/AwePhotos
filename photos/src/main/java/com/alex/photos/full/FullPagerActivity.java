@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -189,7 +190,7 @@ public class FullPagerActivity extends AppCompatActivity implements OnPhotoTapLi
 
             return true;
         } else if (id == R.id.action_share) {
-            if (mAllPhotoList.get(lastViewPageItemPosition).getMediaType() == 3) {
+            if (mAllPhotoList.get(lastViewPageItemPosition).getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("video/*");
                 shareIntent.putExtra(Intent.EXTRA_STREAM, getUri(mAllPhotoList.get(lastViewPageItemPosition).getPath()));

@@ -2,6 +2,7 @@ package com.alex.photos.piece;
 
 import android.content.Context;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,14 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<PhotoBean> mShowItems = new ArrayList<>();
     private List<Integer> mHeadPositionList = new ArrayList<>();
     private Context mContext;
+    private boolean isEnableShare = false;
 
     public MyGalleryAdapter(Context context) {
         this.mContext = context;
+    }
+
+    public void setEnableShare(boolean enableShare) {
+        isEnableShare = enableShare;
     }
 
     @Override
@@ -56,7 +62,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         if (holder instanceof BodyViewHolder) {
-            if (mItem.getMediaType() == 3) {
+            if (mItem.getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                 ((BodyViewHolder) holder).mRlGifInfo.setVisibility(View.INVISIBLE);
                 ((BodyViewHolder) holder).mRlVideoInfo.setVisibility(View.VISIBLE);
                 ((BodyViewHolder) holder).mTvVideoTime.setText(mItem.getDuration());
@@ -73,7 +79,7 @@ public class MyGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             ((BodyViewHolder) holder).mView.setOnClickListener(v -> {
                 ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, PagerFragment.newInstance(getAllDataNoHead(), trimPosition(position)), "pager")
+                        .replace(android.R.id.content, PagerFragment.newInstance(getAllDataNoHead(), trimPosition(position)).withShare(isEnableShare), "pager")
                         .addToBackStack(null)
                         .commit();
             });
