@@ -2,6 +2,7 @@ package com.alex.photos.piece;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -71,6 +72,22 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_solo_pager, container, false);
+        view.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    v.setPressed(true);
+                }
+                break;
+
+                case MotionEvent.ACTION_UP: {
+                    v.setPressed(false);
+                    v.performClick();
+                    if (null != getFragmentManager()) getFragmentManager().popBackStack();
+                }
+                break;
+            }
+            return true;
+        });
 
         // Inflate the layout for this fragment
         tvPagerIndex = view.findViewById(R.id.tv_pager_index);

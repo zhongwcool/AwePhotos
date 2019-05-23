@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -85,10 +86,28 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
+        view.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    v.setPressed(true);
+                }
+                break;
+
+                case MotionEvent.ACTION_UP: {
+                    v.setPressed(false);
+                    v.performClick();
+                    if (null != getFragmentManager()) getFragmentManager().popBackStack();
+                }
+                break;
+            }
+            return true;
+        });
         mLoadingView = view.findViewById(R.id.progress);
         mNoDataView = view.findViewById(R.id.iv_no_data);
         recyclerView = view.findViewById(R.id.list);
-        view.findViewById(R.id.action_close).setOnClickListener(v -> getActivity().onBackPressed());
+        view.findViewById(R.id.action_close).setOnClickListener(v -> {
+            if (null != getFragmentManager()) getFragmentManager().popBackStack();
+        });
         // Set the adapter
         //获取屏幕方向
         Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息

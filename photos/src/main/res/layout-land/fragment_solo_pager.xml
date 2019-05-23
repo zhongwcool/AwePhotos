@@ -5,15 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/translucent"
     android:elevation="25dp"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".piece.SoloPagerFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="16dp">
+        android:paddingStart="46dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="46dp"
+        android:paddingBottom="16dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
