@@ -34,7 +34,7 @@
             tools:listitem="@layout/item_rv_media" />
 
         <RelativeLayout
-            android:id="@+id/iv_no_data"
+            android:id="@+id/view_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">

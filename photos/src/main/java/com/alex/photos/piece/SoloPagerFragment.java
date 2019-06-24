@@ -31,6 +31,9 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
     private int mSize = 1;
     private ViewPager mViewPager;
     private TextView tvPagerIndex;
+    private View mLoadingView;
+    private View mNoDataView;
+    private View mMainView;
     private boolean isEnableShare = false;
 
     public SoloPagerFragment() {
@@ -91,6 +94,12 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
 
         // Inflate the layout for this fragment
         tvPagerIndex = view.findViewById(R.id.tv_pager_index);
+        mLoadingView = view.findViewById(R.id.progress);
+        mNoDataView = view.findViewById(R.id.view_no_data);
+        mMainView = view.findViewById(R.id.view_main);
+        view.findViewById(R.id.action_close).setOnClickListener(v -> {
+            if (null != getFragmentManager()) getFragmentManager().popBackStack();
+        });
         mViewPager = view.findViewById(R.id.viewPager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -117,6 +126,7 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
     @Override
     public void onStart() {
         super.onStart();
+        mLoadingView.setVisibility(View.VISIBLE);
         LoaderManager.getInstance(this).restartLoader(1, null, new DataLoader(getContext(), this));
     }
 
@@ -130,8 +140,14 @@ public class SoloPagerFragment extends Fragment implements DataLoader.LoadCallba
     @Override
     public void onData(ArrayList<PhotoBean> photos) {
         mSize = photos.size();
-        mPagerAdapter.setAdapterList(photos);
-        if (currentIndex < mSize) mViewPager.setCurrentItem(currentIndex);
-        tvPagerIndex.setText(getString(R.string.tips_pager_index, (currentIndex + 1), mSize));
+        mLoadingView.setVisibility(View.GONE);
+        if (mSize > 0) {
+            mPagerAdapter.setAdapterList(photos);
+            if (currentIndex < mSize) mViewPager.setCurrentItem(currentIndex);
+            tvPagerIndex.setText(getString(R.string.tips_pager_index, (currentIndex + 1), mSize));
+        } else {
+            mNoDataView.setVisibility(View.VISIBLE);
+            mMainView.setVisibility(View.INVISIBLE);
+        }
     }
 }

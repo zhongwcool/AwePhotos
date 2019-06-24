@@ -103,7 +103,7 @@ public class GalleryFragment extends Fragment implements DataLoader.LoadCallback
             return true;
         });
         mLoadingView = view.findViewById(R.id.progress);
-        mNoDataView = view.findViewById(R.id.iv_no_data);
+        mNoDataView = view.findViewById(R.id.view_no_data);
         recyclerView = view.findViewById(R.id.list);
         view.findViewById(R.id.action_close).setOnClickListener(v -> {
             if (null != getFragmentManager()) getFragmentManager().popBackStack();

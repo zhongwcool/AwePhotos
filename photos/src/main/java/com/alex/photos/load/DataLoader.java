@@ -70,7 +70,7 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         ArrayList<PhotoBean> albumInfoList = new ArrayList<>();//所有文件夹
 
-        while (cursor.moveToNext()) {
+        if (null != cursor) while (cursor.moveToNext()) {
             String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME));
             long dateTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED));
