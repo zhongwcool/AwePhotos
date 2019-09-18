@@ -71,14 +71,14 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
         ArrayList<PhotoBean> albumInfoList = new ArrayList<>();//所有文件夹
 
         if (null != cursor) while (cursor.moveToNext()) {
-            String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
+            int mediaType = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID));
+            String path = getRealPath(mediaType, String.valueOf(id));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME));
             long dateTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED));
-            int mediaType = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE));
             long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE));
             int height = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.HEIGHT));
             int width = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.WIDTH));
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID));
 
             //获取所在的文件夹
             String dirName = FileUtils.getParentFolderName(path);
@@ -86,7 +86,7 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
             if (mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                 //处理视频的时长信息
-                long duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION));
+                long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.DURATION));
                 albumInfoBean.setDuration(DateUtils.stringForTime(duration));
             }
 
@@ -94,6 +94,15 @@ public class DataLoader implements LoaderManager.LoaderCallbacks<Cursor> {
         }
         mLoader.onData(albumInfoList);
         //cursor.close();
+    }
+
+    public String getRealPath(int mediaType, String id) {
+        if (mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+            return MediaStore.Video.Media.EXTERNAL_CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build().toString();
+        } else {
+            return MediaStore.Images.Media.EXTERNAL_CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build().toString();
+        }
+
     }
 
     @Override

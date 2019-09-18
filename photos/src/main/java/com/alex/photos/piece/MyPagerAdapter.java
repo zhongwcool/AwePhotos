@@ -18,7 +18,6 @@ import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.alex.photos.BuildConfig;
 import com.alex.photos.R;
 import com.alex.photos.bean.PhotoBean;
 import com.alex.photos.utils.DateUtils;
@@ -30,6 +29,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,12 +81,12 @@ public class MyPagerAdapter extends PagerAdapter {
                 if (bean.getMediaType() == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("video/*");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, getUri(bean.getPath()));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(bean.getPath()));
                     mContext.startActivity(Intent.createChooser(shareIntent, "分享视频到"));
                 } else {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("image/*");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, getUri(bean.getPath()));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(bean.getPath()));
                     mContext.startActivity(Intent.createChooser(shareIntent, "分享图片到"));
                 }
             });
@@ -94,9 +94,9 @@ public class MyPagerAdapter extends PagerAdapter {
             view.findViewById(R.id.share_control).setVisibility(View.INVISIBLE);
         }
 
-        Uri mediaUri = Uri.parse("file://" + bean.getPath());
+        //Uri mediaUri = Uri.parse("file://" + bean.getPath());
         Glide.with(mContext)
-                .load(mediaUri)
+                .load(bean.getPath())
                 .placeholder(R.drawable.img_place_holder)
                 .into(imageView);
 
@@ -133,9 +133,12 @@ public class MyPagerAdapter extends PagerAdapter {
             sb.append("时长: ").append(bean.getDuration());
         } else {
             try {
-                ExifInterface exifInterface = new ExifInterface(bean.getPath());
+                InputStream is = mContext.getContentResolver().openInputStream(Uri.parse(bean.getPath()));
+                if (null == is) return sb.toString();
+                ExifInterface exifInterface = new ExifInterface(is);
                 String device = exifInterface.getAttribute(ExifInterface.TAG_MAKE);
                 sb.append("设备: ").append(null == device ? "未记录" : ExifUtil.hexStr2Str(device)).append("\n");
+                is.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -156,11 +159,7 @@ public class MyPagerAdapter extends PagerAdapter {
     private String getHostAppId() {
         try {
             ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(mContext.getPackageName(), PackageManager.GET_META_DATA);
-            if (null != info) {
-                return info.packageName;
-            } else {
-                return BuildConfig.APPLICATION_ID;
-            }
+            return info.packageName;
         } catch (PackageManager.NameNotFoundException e) {
             throw new IllegalArgumentException(" get application info error! ", e);
         }

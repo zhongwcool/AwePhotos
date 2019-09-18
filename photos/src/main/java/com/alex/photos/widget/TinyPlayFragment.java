@@ -3,6 +3,7 @@ package com.alex.photos.widget;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -72,7 +73,8 @@ public class TinyPlayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             bean = getArguments().getParcelable(KEY_MEDIA);
-            isDialogStyle = getArguments().getBoolean(KEY_DIALOG);
+            isDialogStyle = getArguments().getInt(KEY_DIALOG) == UI_DIALOG;
+
             if (null == bean || null == bean.getPath()) {
                 new AlertDialog.Builder(getContext())
                         .setMessage("播放地址为空")
@@ -124,7 +126,8 @@ public class TinyPlayFragment extends Fragment {
             mVideoView.setLayoutParams(lp);
         }
         //将VideoView与MediaController进行关联
-        mVideoView.setVideoPath(bean.getPath());
+        //mVideoView.setVideoPath(bean.getPath());
+        mVideoView.setVideoURI(Uri.parse(bean.getPath()));
         mVideoView.setMediaController(mediaController);
         mVideoView.setOnCompletionListener(mp -> getActivity().onBackPressed());
         mediaController.setMediaPlayer(mVideoView);

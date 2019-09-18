@@ -1,7 +1,6 @@
 package com.alex.photos.full;
 
 import android.content.Context;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +55,9 @@ public class MyFullGalleryAdapter extends RecyclerView.Adapter<MyFullGalleryAdap
             holder.mRlGifInfo.setVisibility(".gif".equalsIgnoreCase(holder.mItem.getExtension()) ? View.VISIBLE : View.INVISIBLE);
         }
 
-        Uri mediaUri = Uri.parse("file://" + holder.mItem.getPath());
+        //Uri mediaUri = Uri.parse("file://" + holder.mItem.getPath());
         Glide.with(mContext)
-                .load(mediaUri)
+                .load(holder.mItem.getPath())
                 .centerCrop()
                 .into(holder.mContentView);
 
