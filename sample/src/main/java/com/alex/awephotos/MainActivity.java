@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import com.alex.photos.full.GalleryActivity;
 import com.alex.photos.piece.GalleryFragment;
 import com.alex.photos.piece.SoloPagerFragment;
 
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        findViewById(R.id.tv_model_1).setOnClickListener(this);
+
         findViewById(R.id.tv_model_2).setOnClickListener(this);
         findViewById(R.id.tv_model_3).setOnClickListener(this);
 
@@ -60,10 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_model_1: {
-                GalleryActivity.start(this);
-            }
-            break;
             case R.id.tv_model_2: {
                 getSupportFragmentManager().beginTransaction()
                         .replace(android.R.id.content, GalleryFragment.newInstance(4).withShare(false), "gallery")

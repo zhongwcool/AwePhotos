@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -140,6 +141,7 @@ public class MyPagerAdapter extends PagerAdapter {
                 sb.append("设备: ").append(null == device ? "未记录" : ExifUtil.hexStr2Str(device)).append("\n");
                 is.close();
             } catch (IOException e) {
+                Log.e("MyPager", "No such file: " + bean.getPath());
                 e.printStackTrace();
             }
         }
